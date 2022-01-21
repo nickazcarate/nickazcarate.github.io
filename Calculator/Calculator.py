@@ -83,7 +83,7 @@ def getScoreboard():
     scoreboard = pd.DataFrame(columns=['username', 'score'])
     for p in range(0, len(player_list)):
         scoreboard = scoreboard.append([{'username': player_list[p].get_username(), 'score': player_list[p].get_points()}])
-    scoreboard = scoreboard.sort_values(['score', 'username'], ascending=False)
+    scoreboard = scoreboard.sort_values(['score'], ascending=False)
     return scoreboard
 
 def printScoreboard():
