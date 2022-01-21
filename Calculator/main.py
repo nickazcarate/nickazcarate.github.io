@@ -12,11 +12,24 @@ calculateScores(1)
 calculateScores(2)
 # printScoreboard()
 
-df = player_list[1].get_history(False).reset_index()
 
-# df = getScoreboard().reset_index()
+
+
+
+
+
+
+
+
+# df = player_list[1].get_history(False).reset_index()
+
+df = getScoreboard().reset_index()
 df_styled = df.style
-print(df_styled.render())
+df_styled = df_styled.hide_index().hide_columns('index')  # remove index columns
+print(df_styled.hide_index().render())
+
+# @ nick a, look at this for styling ideas. Look at maybe text gradient or highlighting based on the score value?
+#  https://pandas.pydata.org/docs/reference/api/pandas.io.formats.style.Styler.html
 
 
 
