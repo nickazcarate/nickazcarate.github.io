@@ -1,0 +1,31 @@
+html, body {
+	margin: 0;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	font-family: sans-serif;
+	font-weight: 100;
+}
+html{
+	height:100%;
+}
+body{
+	min-height: 100%;
+}
+
+.header {
+  padding: 1px;
+  text-align: center;
+  /*background: #FFF8DC;*/
+  color: white;
+  font-size: 25px;
+}
+
+h2.player-name{
+  color: #ffffff;
+  font-size: 40px;
+  text-align: center;
+}
+
+.scoreboard_names{
+    font-size: 30px;
+    text-align: center;
+}
