@@ -18,6 +18,12 @@ def calculateScores(episode_number):
 
     responses_raw = pd.read_csv('rpdr_s14e' + episode_number_str + '_responses.csv')
 
+    # CONVERT top 3 into list
+    if episode_number != 2:
+        responses_raw['episode_top3'] = responses_raw[['Top 3 of the Week (Pick #1) (2 Points)',
+                                                       'Top 3 of the Week (Pick #2) (2 Points)',
+                                                       'Top 3 of the Week (Pick #3) (2 Points)']].values.tolist()
+
     # CONVERT bottom 3 into list
     responses_raw['episode_bottom3'] = responses_raw[['Bottom 3 of the Week (Pick #1) (2 Points)',
                                                       'Bottom 3 of the Week (Pick #2) (2 Points)',
