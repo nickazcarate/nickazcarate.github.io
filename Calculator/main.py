@@ -1,4 +1,5 @@
 from Calculator import *
+from websiteCode import *
 import numpy as np
 import jinja2
 from IPython.display import display
@@ -9,18 +10,25 @@ import pickle
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 calculateScores(1)
+calculateScores(2)
+calculateScores(3)
+calculateScores(4)
 # printScoreboard()
 
-calculateScores(2)
-# printScoreboard()
+generate_history_html_file()
+generate_scoreboard_html_file()
+print('############################################### HISTORY HTML #############################################################')
 
 for p in range(0, len(player_list)):
     print("<h2 id=\"" + player_list[p].get_username() + "\" class=\"player-name\">" + player_list[p].get_username() + "</h2>")
     df = player_list[p].get_history(False).reset_index()
     df_styled = df.style
-    df_styled = df_styled.hide_index().hide_columns('index').hide_columns('question_type')  # remove index columns
+    df_styled = df_styled.hide_index().hide_columns('index')  # remove index columns
+    df_styled = df_styled.hide_columns('question_type')
     print(df_styled.hide_index().render())
     print('\n\n')
+
+print('############################################### SCOREBOARD HTML #############################################################')
 
 scoreboard = getScoreboard()
 
