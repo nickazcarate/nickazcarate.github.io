@@ -45,8 +45,8 @@ def calculateScores(episode_number):
             episode_answers['response'] = 'No response'
             episode_answers['points_awarded'] = 0
             player_list[p].append_history(
-                episode_answers[['episode_number', 'question_raw', 'question_abbreviated', 'question_type',
-                                'response', 'answer', 'point_value', 'points_awarded']])
+                episode_answers[['episode_number', 'question_proper', 'question_type',
+                                 'response', 'answer', 'point_value', 'points_awarded']])
         elif len(player_responses) > 1:
             raise Exception (temp_player_username + " has more than one bracket submission")
         else:
@@ -81,7 +81,7 @@ def calculateScores(episode_number):
                     player_list[p].add_points(points_to_be_awarded)
 
             player_list[p].append_history(temp_merge[
-                                              ['episode_number', 'question_abbreviated', 'question_type',
+                                              ['episode_number', 'question_proper', 'question_type',
                                                'response', 'answer', 'point_value', 'points_awarded']])
     return player_list
     # savePlayerList(player_list, episode_number)
