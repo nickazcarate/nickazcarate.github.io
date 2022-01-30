@@ -33,7 +33,7 @@ questions_answers_df = pd.DataFrame(np.array([
     [4, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Angeria Paris VanMichaels']],
     [4, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Willow Pill', 'Angeria Paris VanMichaels', 'Deja Skye']],
     [4, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['Kornbread Jete', 'Alyssa Hunter', 'Kerri Colby']],
-    [4, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['June Jambalaya']],
+    [4, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['Alyssa Hunter']],
     [4, 'bonus',  'Who will be saved by the chocolate bar? (10 points)', 'saved_by_chocolate_bar', 'Saved by the bar', 10, []],
     [4, 'bonus',  'Who will earn the most money throughout the season? (20 points)', 'most_money_earned', 'Most $$$ earned during season', 20, []]
 
@@ -41,4 +41,4 @@ questions_answers_df = pd.DataFrame(np.array([
 
 
                                     ]),
-    columns = ['episode_number', 'question_type', 'question_raw', 'question_fancy', 'question_abbreviated', 'point_value', 'answer'])
+    columns = ['episode_number', 'question_type', 'question_raw', 'question_abbreviated', 'question_proper', 'point_value', 'answer'])
