@@ -47,7 +47,8 @@ def calculateScores(episode_number):
             player_list[p].append_history(
                 episode_answers[['episode_number', 'question_raw', 'question_abbreviated', 'question_type',
                                 'response', 'answer', 'point_value', 'points_awarded']])
-
+        elif len(player_responses) > 1:
+            raise Exception (temp_player_username + " has more than one bracket submission")
         else:
             player_responses_t = player_responses.transpose()
             player_responses_t.columns = ["response"]
