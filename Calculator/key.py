@@ -51,6 +51,13 @@ questions_answers_df = pd.DataFrame(np.array([
     [6, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['Maddy Morphosis']],
     [6, 'bonus',  'season_top3_reask', 'season_top3_reask', 'Season Top 3 (Re-Ask)', 5, []],
     [6, 'bonus',  'season_winner_reask', 'season_winner_reask', 'Season Top 3 (Re-Ask)', 25, []],
-    [6, 'bonus',  'Who will be picked as Miss Congeniality? (10 points).', 'miss_congeniality_reask', 'Miss Congeniality (Re-Ask)', 10, []]
+    [6, 'bonus',  'Who will be picked as Miss Congeniality? (10 points).', 'miss_congeniality_reask', 'Miss Congeniality (Re-Ask)', 10, []],
+
+    ## EPISODE 7
+    [7, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Lady Camden']],
+    [7, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Jorgeous', 'Willow Pill', 'Jasmine Kennedie', 'Bosco', 'Daya Betty', 'Lady Camden']],
+    [7, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['No bottoms (tragic)']],
+    [7, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['No elimination']]
+
                                     ]),
     columns = ['episode_number', 'question_type', 'question_raw', 'question_abbreviated', 'question_proper', 'point_value', 'answer'])

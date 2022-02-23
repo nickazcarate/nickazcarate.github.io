@@ -9,6 +9,7 @@ calculateScores(3)
 calculateScores(4)
 calculateScores(5)
 calculateScores(6)
+calculateScores(7)
 # printScoreboard()
 
 generate_history_html_file()
