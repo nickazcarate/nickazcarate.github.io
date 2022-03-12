@@ -57,7 +57,19 @@ questions_answers_df = pd.DataFrame(np.array([
     [7, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Lady Camden']],
     [7, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Jorgeous', 'Willow Pill', 'Jasmine Kennedie', 'Bosco', 'Daya Betty', 'Lady Camden']],
     [7, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['No bottoms (tragic)']],
-    [7, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['No elimination']]
+    [7, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['No elimination']],
 
+    ## EPISODE 8
+    [8, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Bosco']],
+    [8, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Angeria Paris VanMichaels', 'Deja Skye', 'Bosco']],
+    [8, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['Jasmine Kennedie', 'Lady Camden', 'Kerri Colby']],
+    [8, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['Kerri Colby']],
+
+    ## EPISODE 9
+    [9, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Bosco']],
+    [9, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Willow Pill', 'Bosco', 'Deja Skye']],
+    [9, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['Jasmine Kennedie', 'Jorgeous', 'Daya Betty']],
+    [9, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['No elimination']],
+    [9, 'bonus', 'What will be the most common color worn on this weeks runway? (3 Points)', 'most_common_color', 'Most Common Runway Color', 3, ['idk']]
                                     ]),
     columns = ['episode_number', 'question_type', 'question_raw', 'question_abbreviated', 'question_proper', 'point_value', 'answer'])
