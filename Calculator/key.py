@@ -8,8 +8,8 @@ questions_answers_df = pd.DataFrame(np.array([
     [1, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 0, ['Bosco', 'Kornbread Jete', 'Willow Pill']],
     [1, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 0, ['Alyssa Hunter', 'June Jambalaya', 'Orion Story']],
     [1, 'weekly', 'Eliminated Queen of the Week (of the bottom 3) (5 Points)', 'episode_eliminated', 'Eliminated Queen', 0, ['Orion Story']],
-    [1, 'bonus',  'America''s Next Drag Superstar (winner of the season) (50 Points)', 'season_winner', 'Season Winner', 50, []],
-    [1, 'bonus',  'season_top3', 'season_top3', 'Season Top 3', 10, []],
+    [1, 'bonus',  'America\'s Next Drag Superstar (winner of the season) (50 Points)', 'season_winner', 'Season Winner', 50, ['Willow Pill']],
+    [1, 'bonus',  'season_top3', 'season_top3', 'Season Top 3', 10, ['Lady Camden', 'Willow Pill']],
     [1, 'bonus',  'Lip Sync Assassin (who will be in the most lip syncs) (15 points)', 'lipsync_assasin', 'Lipsync Assasin', 15, ['Jorgeous']],
     [1, 'bonus',  'Guess a celebrity portrayed in Snatch Game (Guess #1) (10 Points)', 'snatch_game_celebrities', 'Snatch Game Celebrities', 10, []],
 
@@ -25,7 +25,7 @@ questions_answers_df = pd.DataFrame(np.array([
     [3, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Willow Pill', 'Angeria Paris VanMichaels', 'Jorgeous']],
     [3, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['June Jambalaya', 'Orion Story', 'Maddy Morphosis']],
     [3, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['June Jambalaya']],
-    [3, 'bonus',  'Who will be picked as Miss Congeniality? (20 points)', 'miss_congeniality', 'Miss Congeniality', 20, []],
+    [3, 'bonus',  'Who will be picked as Miss Congeniality? (20 points)', 'miss_congeniality', 'Miss Congeniality', 20, ['Kornbread Jete']],
     [3, 'bonus',  'Winner of Snatch Game (10 points)', 'snatch_game_winner', 'Snatch Game Winner', 10, ['Deja Skye']],
     [3, 'bonus',  'Do you think the first two eliminated queens will be brought back? (5 points)', 'first_two_elim_return', 'First Two Eliminations Return', 5, ['Yes']],
 
@@ -49,9 +49,9 @@ questions_answers_df = pd.DataFrame(np.array([
     [6, 'weekly', 'episode_top3', 'episode_top3', 'Episode Top 3', 2, ['Jorgeous', 'Angeria Paris VanMichaels', 'Lady Camden']],
     [6, 'weekly', 'episode_bottom3', 'episode_bottom3', 'Episode Bottom 3', 2, ['Jasmine Kennedie', 'Deja Skye', 'Maddy Morphosis']],
     [6, 'weekly', 'Of the bottom 3, who is the eliminated queen of the week? (5 Points)', 'episode_eliminated', 'Eliminated Queen', 5, ['Maddy Morphosis']],
-    [6, 'bonus',  'season_top3_reask', 'season_top3_reask', 'Season Top 3 (Re-Ask)', 5, []],
-    [6, 'bonus',  'season_winner_reask', 'season_winner_reask', 'Season Top 3 (Re-Ask)', 25, []],
-    [6, 'bonus',  'Who will be picked as Miss Congeniality? (10 points).', 'miss_congeniality_reask', 'Miss Congeniality (Re-Ask)', 10, []],
+    [6, 'bonus',  'season_top3_reask', 'season_top3_reask', 'Season Top 3 (Re-Ask)', 5, ['Lady Camden', 'Willow Pill']],
+    [6, 'bonus',  'Of the season top 3, who will be America\'s Next Drag Superstar (winner of the season) (25 Points).', 'season_winner_reask', 'Season Winner', 25, ['Willow Pill']],
+    [6, 'bonus',  'Who will be picked as Miss Congeniality? (10 points).', 'miss_congeniality_reask', 'Miss Congeniality (Re-Ask)', 10, ['Kornbread Jete']],
 
     ## EPISODE 7
     [7, 'weekly', 'Of the top 3, who\'s the winner of the week? (5 Points)', 'episode_winner', 'Episode Winner', 5, ['Lady Camden']],

@@ -18,6 +18,15 @@ def calculateScores(episode_number):
 
     responses_raw = pd.read_csv('rpdr_s14e' + episode_number_str + '_responses.csv')
 
+    if episode_number == 1:
+        responses_raw['season_top3'] = responses_raw[['Top 3 of the Season (Guess #1) (10 Points)',
+                                                      'Top 3 of the Season (Guess #2) (10 Points)',
+                                                      'Top 3 of the Season (Guess #3) (10 Points)']].values.tolist()
+    if episode_number == 6:
+        responses_raw['season_top3_reask'] = responses_raw[['Top 3 of the Season (Guess #1) (5 Points).',
+                                                            'Top 3 of the Season (Guess #2) (5 Points).',
+                                                            'Top 3 of the Season (Guess #3) (5 Points).']].values.tolist()
+
     # CONVERT top 3 into list
     if episode_number == 11:
         responses_raw['episode_elim3'] = responses_raw[['Elimination Guess #1 (5 Points)',
