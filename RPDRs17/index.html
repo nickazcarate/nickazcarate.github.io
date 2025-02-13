@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuPaul's Drag Race Bracket</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7e1ff;
+            color: #5e2750;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px #ff69b4;
+        }
+        table {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff69b4;
+            color: white;
+            cursor: pointer;
+        }
+        th:hover {
+            background-color: #d43790;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .score-high { background-color: #ffc107; }  /* Gold */
+        .score-mid { background-color: #ffdd57; }  /* Light Yellow */
+        .score-low { background-color: #fce4ec; }  /* Light Pink */
+        .max-score { font-weight: bold; background-color: purple !important; color: white; } /* Max Score */
+
+        @media (max-width: 600px) {
+            table { font-size: 0.9em; }
+            h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🏁 RuPaul's Drag Race Bracket 🏁</h1>
+    <p>Scores update automatically each week!</p>
+    <table id="scoreTable">
+        <thead>
+            <tr id="headerRow">
+                <!-- Headers will be loaded dynamically -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be inserted dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        const CSV_URL = "https://yourwebsite.com/scores.csv";  // Change this to your hosted CSV file
+
+        async function fetchCSV(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Failed to fetch CSV");
+                const text = await response.text();
+                processCSV(text);
+            } catch (error) {
+                console.error("Error loading CSV:", error);
+            }
+        }
+
+        function processCSV(csv) {
+            const rows = csv.trim().split("\n").map(row => row.split(","));
+            const headerRow = rows[0];
+            scores = rows.slice(1).map(row => row.map(cell => isNaN(cell) ? cell : Number(cell)));
+
+            createTableHeader(headerRow);
+            loadTable();
+        }
+
+        function createTableHeader(headers) {
+            const headerRow = document.getElementById("headerRow");
+            headerRow.innerHTML = "";
+            headers.forEach((header, index) => {
+                let th = document.createElement("th");
+                th.textContent = header;
+                th.onclick = () => sortTable(index);
+                headerRow.appendChild(th);
+            });
+        }
+
+        function loadTable() {
+            const tbody = document.querySelector("#scoreTable tbody");
+            tbody.innerHTML = "";
+
+            if (scores.length === 0) return;
+
+            let maxValues = Array(scores[0].length).fill(0);
+
+            // Find the maximum value for each column
+            scores.forEach(row => {
+                for (let i = 1; i < row.length; i++) {
+                    if (row[i] > maxValues[i]) {
+                        maxValues[i] = row[i];
+                    }
+                }
+            });
+
+            scores.forEach(row => {
+                let tr = document.createElement("tr");
+                row.forEach((cell, index) => {
+                    let td = document.createElement("td");
+                    td.textContent = cell;
+
+                    if (index > 0) { // Skip username column
+                        if (cell === maxValues[index]) {
+                            td.classList.add("max-score");
+                        } else if (cell >= 10) {
+                            td.classList.add("score-high");
+                        } else if (cell >= 5) {
+                            td.classList.add("score-mid");
+                        } else {
+                            td.classList.add("score-low");
+                        }
+                    }
+
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        function sortTable(col) {
+            scores.sort((a, b) => (typeof a[col] === "string") ? a[col].localeCompare(b[col]) : b[col] - a[col]);
+            loadTable();
+        }
+
+        fetchCSV(CSV_URL);  // Fetch and display CSV data automatically
+    </script>
+</body>
+</html>
