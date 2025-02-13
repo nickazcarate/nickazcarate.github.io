@@ -68,7 +68,7 @@
     </table>
 
     <script>
-        const CSV_URL = "https://yourwebsite.com/scores.csv";  // Change this to your hosted CSV file
+        const CSV_URL = "https://nickazcarate.github.io/scores.csv";  // Change this to your hosted CSV file
 
         async function fetchCSV(url) {
             try {
@@ -87,7 +87,9 @@
             scores = rows.slice(1).map(row => row.map(cell => isNaN(cell) ? cell : Number(cell)));
 
             createTableHeader(headerRow);
-            loadTable();
+
+            // Sort by last column (Total Score) by default
+            sortTable(scores[0].length - 1, false);
         }
 
         function createTableHeader(headers) {
@@ -96,7 +98,7 @@
             headers.forEach((header, index) => {
                 let th = document.createElement("th");
                 th.textContent = header;
-                th.onclick = () => sortTable(index);
+                th.onclick = () => sortTable(index, true); // Click to sort manually
                 headerRow.appendChild(th);
             });
         }
@@ -142,9 +144,9 @@
             });
         }
 
-        function sortTable(col) {
+        function sortTable(col, reload = true) {
             scores.sort((a, b) => (typeof a[col] === "string") ? a[col].localeCompare(b[col]) : b[col] - a[col]);
-            loadTable();
+            if (reload) loadTable();
         }
 
         fetchCSV(CSV_URL);  // Fetch and display CSV data automatically
