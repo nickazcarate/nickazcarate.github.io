@@ -22,8 +22,10 @@ class Player:
     def append_history(self, history_to_add):
         self.history = self.history.append(history_to_add)
 
-    def get_history(self, include_bonus):
-        if include_bonus == True:
+    def get_history(self, include_questions_without_answers):
+        if include_questions_without_answers == True:
             return self.history
         else:
-            return self.history[self.history['question_type'] != 'bonus']
+            # history_minus_empty_answers = self.history[self.history[(isinstance(self.history['answer'], list)) & (len(self.history['answer']) == 0)]]
+            # return history_minus_empty_answers
+            return self.history[self.history['answer'].str.len() != 0]

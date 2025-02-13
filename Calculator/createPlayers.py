@@ -19,3 +19,7 @@ for p in range(0, len(e01_responses_raw)):
     ## add player to player list
     player_list.append(player)
 
+# Add extra players who were not in episode 1 manually
+player = Player('Evan', 'Evanbettez1', 'No')
+## add player to player list
+player_list.append(player)
