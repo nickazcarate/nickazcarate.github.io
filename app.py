@@ -1285,7 +1285,7 @@ for qid, q in ep.questions.items():
         
 
         q.no_correct_answer = st.checkbox(
-            "No correct answer this time (everyone gets 0)?",
+            "No correct answer - don't ever score this (everyone gets 0)?",
             value=bool(q.no_correct_answer),
             key=f"nocorrect_{qid}"
         )
