@@ -390,15 +390,11 @@ def fuzzy_match(name: str, choices: List[str], score_cutoff: int = 86) -> str:
         return best[0]
     return name
 
-def extract_points(header: str) -> Optional[int]:
-    """
-    Try to parse "(5 Points)" / "(5 points)" from column header.
-    Returns int or None.
-    """
+def extract_points(header: str) -> Optional[float]:
     h = norm_text(header)
-    m = re.search(r"\(\s*(\d+)\s*points?\s*\)", h, flags=re.IGNORECASE)
+    m = re.search(r"\(\s*(\d+(?:\.\d+)?)\s*points?\s*\)", h, flags=re.IGNORECASE)
     if m:
-        return int(m.group(1))
+        return float(m.group(1))
     return None
 
 def strip_pick_suffix(header: str) -> str:
@@ -944,6 +940,35 @@ sheet_url = st.text_input(
 )
 
 load_btn = st.button("Load sheet", type="primary", key="load_sheet_btn")
+
+def set_loaded_df(df: pd.DataFrame, export_url: str, gid: str, sheet_id: str):
+    st.session_state["loaded_df"] = df
+    st.session_state["loaded_export_url"] = export_url
+    st.session_state["loaded_episode_gid"] = gid
+    st.session_state["loaded_sheet_id"] = sheet_id
+    st.session_state["loaded_df_sig"] = (sheet_id, gid, df.shape, tuple(df.columns))
+
+# Auto-recover if URL is filled but df is missing (session reset, restart, etc.)
+if sheet_url and "loaded_df" not in st.session_state:
+    try:
+        sheet_id = sheet_id_from_url(sheet_url)
+        df, export_url, gid = try_load(sheet_id)
+        set_loaded_df(df, export_url, gid, sheet_id)
+        st.info("Recovered sheet automatically (session was reset).")
+    except Exception as e:
+        st.error(f"Could not auto-reload sheet: {e}")
+        st.stop()
+
+# Your existing manual load button can still force a refresh
+if sheet_url and load_btn:
+    try:
+        sheet_id = sheet_id_from_url(sheet_url)
+        df, export_url, gid = try_load(sheet_id)
+        set_loaded_df(df, export_url, gid, sheet_id)
+        st.success(f"Loaded {len(df):,} rows (gid={gid}).")
+    except Exception as e:
+        st.error(f"Could not load sheet. Error: {e}")
+        st.stop()
 
 if not sheet_url:
     st.info("Paste the link above, then click **Load sheet**.")
