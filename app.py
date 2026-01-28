@@ -125,6 +125,7 @@ def award_new_bonuses(state: dict, contestants: List[str]) -> Dict[str, int]:
             # Backward compatible defaults
             qd2 = dict(qd)
             qd2.setdefault("paid", False)
+            qd2.pop("allow_duplicate_picks", None)  # remove legacy field
             q = QuestionSpec(**qd2)
 
             if q.timing != "season":
@@ -470,7 +471,6 @@ class QuestionSpec:
     qtype: str = "contestant"       # contestant|text
     timing: str = "episode"         # episode|season
     points_per_pick: float = 0.0
-    allow_duplicate_picks: bool = False
     no_correct_answer: bool = False # if True: always scores 0 (e.g., "no winner this week")
     correct_answers: List[str] = field(default_factory=list)  # empty = pending/unknown
     notes: str = ""                 # optional
@@ -728,15 +728,14 @@ def score_question_picks(
         picks_norm = [norm_key(p) for p in picks]
         correct_set = set(norm_key(a) for a in q.correct_answers)
 
-    # Deduplicate picks unless allowed
-    if not q.allow_duplicate_picks:
-        seen = set()
-        deduped = []
-        for p in picks_norm:
-            if p not in seen:
-                deduped.append(p)
-                seen.add(p)
-        picks_norm = deduped
+    # Deduplicate picks (always)
+    seen = set()
+    deduped = []
+    for p in picks_norm:
+        if p not in seen:
+            deduped.append(p)
+            seen.add(p)
+    picks_norm = deduped
 
     # Base scoring
     num_correct = sum(1 for p in picks_norm if p in correct_set)
@@ -1173,6 +1172,8 @@ if (
     if existing_ep and existing_ep.get("questions"):
         # Load saved questions
         for qid, qd in existing_ep["questions"].items():
+            qd = dict(qd)
+            qd.pop("allow_duplicate_picks", None)  # remove legacy field
             questions[qid] = QuestionSpec(**qd)
 
         # Merge in newly detected questions not in saved config
@@ -1243,7 +1244,7 @@ for qid, q in ep.questions.items():
     with st.expander(q.label, expanded=False):
         st.caption("Columns captured: " + " | ".join(q.columns))
 
-        c1, c2, c3, c4 = st.columns([1.2, 1.0, 1.0, 1.2])
+        c1, c2, c3 = st.columns([1.2, 1.0, 1.0])
         with c1:
             q.qtype = st.selectbox(
                 "Type", ["contestant", "text"],
@@ -1264,12 +1265,6 @@ for qid, q in ep.questions.items():
                 step=0.5,
                 format="%.2f",
                 key=f"pts_{qid}",
-            )
-        with c4:
-            q.allow_duplicate_picks = st.checkbox(
-                "Allow duplicate picks?",
-                value=bool(q.allow_duplicate_picks),
-                key=f"dup_{qid}"
             )
 
         if q.qtype == "text":
