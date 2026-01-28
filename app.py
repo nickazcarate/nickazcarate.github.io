@@ -970,6 +970,13 @@ if sheet_url and load_btn:
         st.error(f"Could not load sheet. Error: {e}")
         st.stop()
 
+# Always show preview if we have a loaded df (even after reruns)
+if "loaded_df" in st.session_state:
+    st.success(f"Loaded {len(st.session_state['loaded_df']):,} rows (gid={st.session_state.get('loaded_episode_gid','')}).")
+    st.caption("CSV export URL used (open it in your browser if debugging):")
+    st.code(st.session_state.get("loaded_export_url", ""), language="text")
+    st.write("Preview", st.session_state["loaded_df"].head(30))
+
 if not sheet_url:
     st.info("Paste the link above, then click **Load sheet**.")
     st.stop()
