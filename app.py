@@ -768,7 +768,7 @@ username_col = st.selectbox(
 # Episode ID
 default_ep_id = f"ep_{st.session_state.get('loaded_episode_gid','0')}"
 episode_id = st.text_input(
-    "Episode ID / label (e.g., E01, E02, Premiere, Episode 3)",
+    "Episode ID (Number only, e.g. 2, 3, 4, 5, etc.)",
     value=st.session_state.get("working_episode_id", default_ep_id)
 )
 
