@@ -21,6 +21,73 @@ st.set_page_config(page_title="Drag Race Bracket Scorer", layout="wide")
 STATE_PATH = "season_state.json"
 SCORES_CSV_PATH = "scores.csv"
 
+def award_new_bonuses(state: dict, contestants: List[str]) -> Dict[str, int]:
+    """
+    Find season-timing questions across all episodes that:
+      - have correct_answers filled
+      - are not paid yet
+      - have stored season_picks
+    Compute points and add them to state["bonus_by_user"].
+    Returns newly_awarded_by_user for UI display.
+    """
+    state.setdefault("bonus_by_user", {})
+    newly_awarded: Dict[str, int] = {}
+
+    for src_ep_id, src_ep_data in state.get("episodes", {}).items():
+        questions = src_ep_data.get("questions", {})
+        season_picks = src_ep_data.get("season_picks", {})
+
+        for qid, qd in questions.items():
+            # Backward compatible defaults
+            qd2 = dict(qd)
+            qd2.setdefault("paid", False)
+            q = QuestionSpec(**qd2)
+
+            if q.timing != "season":
+                continue
+            if q.no_correct_answer:
+                # mark paid so it doesn't keep resurfacing
+                if not q.paid:
+                    q.paid = True
+                    questions[qid] = asdict(q)
+                continue
+            if q.paid:
+                continue
+            if not q.correct_answers:
+                continue  # still unknown
+            if qid not in season_picks:
+                continue  # no stored picks yet (episode never scored)
+
+            # Award for each user who answered back then
+            for username, picks in season_picks[qid].items():
+                pts, _ = score_question_picks(picks, q, contestants, ep=None)
+                pts = int(pts)
+
+                if pts:
+                    state["bonus_by_user"][username] = int(state["bonus_by_user"].get(username, 0)) + pts
+                    newly_awarded[username] = newly_awarded.get(username, 0) + pts
+
+            # Mark question paid so it won’t award again
+            q.paid = True
+            questions[qid] = asdict(q)
+
+    return newly_awarded
+
+def store_season_picks(state: dict, ep: EpisodeSpec, df: pd.DataFrame) -> None:
+    ep_entry = state["episodes"].setdefault(ep.episode_id, {})
+    season_picks = ep_entry.setdefault("season_picks", {})  # qid -> username -> picks(list)
+
+    for qid, q in ep.questions.items():
+        if q.timing != "season":
+            continue
+
+        season_picks.setdefault(qid, {})
+        for _, r in df.iterrows():
+            username = effective_username(r, ep.username_col)
+            if not username:
+                continue
+            season_picks[qid][username] = get_row_picks(r, q.columns)
+
 def write_scores_csv(state: dict) -> pd.DataFrame:
     """
     Builds and writes the wide season scores CSV to disk.
@@ -68,8 +135,10 @@ def ep_col_name(ep_id: str) -> str:
 
 def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
     episodes = state.get("episodes", {})
-    if not episodes:
-        return pd.DataFrame(columns=["Username", "Total"])
+    bonus_by_user = state.get("bonus_by_user", {})  # username -> bonus
+
+    if not episodes and not bonus_by_user:
+        return pd.DataFrame(columns=["Username", "Bonus", "Episode Total", "Grand Total"])
 
     def sort_key(x):
         try:
@@ -79,32 +148,38 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
 
     ep_ids = sorted(episodes.keys(), key=sort_key)
 
-    per_user = {}
+    # episode totals per user
+    per_user_ep = {}
     for ep_id in ep_ids:
         rows = episodes.get(ep_id, {}).get("last_scored_rows", [])
         for r in rows:
             u = canonical_username(r.get("username", ""))
             if not u:
                 continue
-            per_user.setdefault(u, {})
-            per_user[u][ep_id] = per_user[u].get(ep_id, 0) + int(r.get("total", 0))
+            per_user_ep.setdefault(u, {})
+            per_user_ep[u][ep_id] = per_user_ep[u].get(ep_id, 0) + int(r.get("total", 0))
+
+    # union of users from episodes + bonuses
+    users = set(per_user_ep.keys()) | set(canonical_username(u) for u in bonus_by_user.keys())
 
     out_rows = []
-    for u, scores in per_user.items():
+    for u in sorted(users):
         row = {"Username": u}
-        total = 0
+        episode_total = 0
+
         for ep_id in ep_ids:
-            v = int(scores.get(ep_id, 0))
-            row[ep_col_name(ep_id)] = v     # <-- rename column here
-            total += v
-        row["Total"] = total
+            v = int(per_user_ep.get(u, {}).get(ep_id, 0))
+            row[ep_col_name(ep_id)] = v
+            episode_total += v
+
+        bonus = int(bonus_by_user.get(u, 0))
+        row["Bonus"] = bonus
+        row["Episode Total"] = episode_total
+        row["Grand Total"] = episode_total + bonus
         out_rows.append(row)
 
     df = pd.DataFrame(out_rows)
-    if df.empty:
-        return pd.DataFrame(columns=["Username"] + [ep_col_name(e) for e in ep_ids] + ["Total"])
-
-    df = df.sort_values(["Total", "Username"], ascending=[False, True])
+    df = df.sort_values(["Grand Total", "Username"], ascending=[False, True])
     return df
 
 
@@ -270,6 +345,7 @@ class QuestionSpec:
     no_correct_answer: bool = False # if True: always scores 0 (e.g., "no winner this week")
     correct_answers: List[str] = field(default_factory=list)  # empty = pending/unknown
     notes: str = ""                 # optional
+    paid: bool = False  # NEW: for season questions, has bonus been awarded already?
 
 @dataclass
 class EpisodeSpec:
@@ -297,7 +373,8 @@ def save_state(state: dict) -> None:
 def ensure_state_defaults(state: dict) -> dict:
     state.setdefault("season_name", "Drag Race Season")
     state.setdefault("contestants", [])
-    state.setdefault("episodes", {})  # episode_id -> episode spec dict
+    state.setdefault("episodes", {})
+    state.setdefault("bonus_by_user", {})  # <-- NEW: username -> bonus points total
     return state
 
 
@@ -952,6 +1029,8 @@ if save_ep:
 
             "last_export_url": st.session_state.get("loaded_export_url", "") or prev.get("last_export_url", ""),
             "last_gid_used": st.session_state.get("loaded_episode_gid", "") or prev.get("last_gid_used", ""),
+            
+            "season_picks": prev.get("season_picks", {}),
         }
 
         save_state(state)
@@ -961,6 +1040,7 @@ if run_score:
     apply_implied_outcomes(ep)
 
     scored_df, leaderboard_df = score_episode_df(df, ep, state.get("contestants", []))
+    store_season_picks(state, ep, df)
 
     st.subheader(f"Episode Leaderboard: {ep.episode_id}")
     st.dataframe(leaderboard_df, use_container_width=True)
@@ -979,7 +1059,12 @@ if run_score:
             "last_scored_rows": scored_df.to_dict(orient="records"),
             "last_export_url": st.session_state.get("loaded_export_url", ""),  # <-- add (see below)
             "last_gid_used": st.session_state.get("loaded_episode_gid", ""),   # <-- add
+            "season_picks": state["episodes"][ep.episode_id].get("season_picks", {}),
         })
+        new_bonus = award_new_bonuses(state, state.get("contestants", []))
+        if new_bonus:
+            st.success(f"Awarded new bonuses to {len(new_bonus)} player(s).")
+            
         save_state(state)
         write_scores_csv(state)
 
