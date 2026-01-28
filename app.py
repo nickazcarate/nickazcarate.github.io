@@ -390,7 +390,7 @@ class QuestionSpec:
     columns: List[str]              # df columns that hold picks for this question
     qtype: str = "contestant"       # contestant|text
     timing: str = "episode"         # episode|season
-    points_per_pick: int = 0
+    points_per_pick: float = 0.0
     allow_duplicate_picks: bool = False
     no_correct_answer: bool = False # if True: always scores 0 (e.g., "no winner this week")
     correct_answers: List[str] = field(default_factory=list)  # empty = pending/unknown
