@@ -22,6 +22,71 @@ st.set_page_config(page_title="Drag Race Bracket Scorer", layout="wide")
 STATE_PATH = "season_state.json"
 SCORES_CSV_PATH = "scores.csv"
 
+def parse_checkbox_option_from_column(col_name: str, base_label: str) -> Optional[str]:
+    """
+    Google Forms checkbox exports usually create columns like:
+      "<Question text> [Option text]"
+    This tries to extract "Option text".
+    """
+    c = norm_text(col_name)
+    b = norm_text(base_label)
+    if not c or not b:
+        return None
+
+    # If it starts with the base question text, strip it off
+    if c.startswith(b):
+        tail = c[len(b):].strip()
+        # common separators: space, dash, colon, brackets
+        tail = tail.lstrip(" -–—:").strip()
+
+        # Sometimes it appears like "[Option]" or "(Option)"
+        tail = tail.strip()
+        tail = re.sub(r'^[\[\(]\s*', '', tail)
+        tail = re.sub(r'\s*[\]\)]$', '', tail).strip()
+
+        return tail if tail else None
+
+    return None
+
+def is_checkbox_group(base_label: str, cols_in_group: List[str]) -> bool:
+    """
+    Heuristic: checkbox groups often have MANY columns and the column names
+    look like "<question> <option>" (question repeated in each column).
+    """
+    if len(cols_in_group) < 2:
+        return False
+
+    b = norm_text(base_label)
+    starts = sum(1 for c in cols_in_group if norm_text(c).startswith(b))
+    # if most columns start with the base label, likely checkbox-style
+    return starts >= max(2, int(0.7 * len(cols_in_group)))
+
+def derive_option_universe(base_label: str, cols_in_group: List[str]) -> List[str]:
+    """
+    Extract option names for checkbox columns.
+    Fallback: if extraction fails, use the raw column names as options.
+    """
+    opts = []
+    for c in cols_in_group:
+        opt = parse_checkbox_option_from_column(c, base_label)
+        if opt:
+            opts.append(opt)
+
+    # If nothing extracted, fallback to using columns themselves
+    if not opts:
+        opts = [norm_text(c) for c in cols_in_group if norm_text(c)]
+
+    # stable dedupe
+    seen = set()
+    out = []
+    for o in opts:
+        k = norm_key(o)
+        if k and k not in seen:
+            seen.add(k)
+            out.append(o)
+    return out
+
+
 def award_new_bonuses(state: dict, contestants: List[str]) -> Dict[str, int]:
     """
     Find season-timing questions across all episodes that:
@@ -396,6 +461,8 @@ class QuestionSpec:
     correct_answers: List[str] = field(default_factory=list)  # empty = pending/unknown
     notes: str = ""                 # optional
     paid: bool = False  # NEW: for season questions, has bonus been awarded already?
+    checkbox_scoring: bool = False
+    option_universe: List[str] = field(default_factory=list)
 
 @dataclass
 class EpisodeSpec:
@@ -466,10 +533,10 @@ def detect_question_groups(df: pd.DataFrame, username_col: str) -> Dict[str, Tup
         groups.setdefault(base, []).append(c)
 
     # order columns by pick index
-    out: Dict[str, Tuple[str, List[str], int]] = {}
+    out: Dict[str, Tuple[str, List[str], int, bool, List[str]]] = {}
     for base, cols_in_group in groups.items():
         ordered = sorted(cols_in_group, key=extract_pick_index)
-        # guess points from first column containing "(N Points)"
+
         p = None
         for col in ordered:
             p = extract_points(col)
@@ -477,11 +544,14 @@ def detect_question_groups(df: pd.DataFrame, username_col: str) -> Dict[str, Tup
                 break
         points_guess = p if p is not None else 0
 
-        # create a stable-ish qid
         qid = re.sub(r"[^a-z0-9]+", "_", norm_key(base)).strip("_")
         if not qid:
             qid = f"q_{abs(hash(base)) % 10**8}"
-        out[qid] = (base, ordered, points_guess)
+
+        checkbox_flag = is_checkbox_group(base, ordered)
+        universe = derive_option_universe(base, ordered) if checkbox_flag else []
+
+        out[qid] = (base, ordered, points_guess, checkbox_flag, universe)
 
     return out
 
@@ -580,6 +650,40 @@ def score_question_picks(
     if not q.correct_answers:
         detail["status"] = "pending"
         return 0, detail
+    
+    # ✅ NEW: checkbox scoring = compare checked vs unchecked across full universe
+    if q.qtype == "text" and getattr(q, "checkbox_scoring", False) and q.option_universe:
+        # picks = checked options (because get_row_picks only collects non-empty columns)
+        checked = {norm_key(p) for p in picks if norm_text(p)}
+        correct_in = {norm_key(a) for a in q.correct_answers if norm_text(a)}
+        universe = {norm_key(o) for o in q.option_universe if norm_text(o)}
+
+        # Safety: only score items we know are in the universe
+        checked = checked & universe
+        correct_in = correct_in & universe
+
+        # Correct “in” guesses (checked & should be in)
+        tp = len(checked & correct_in)
+
+        # Correct “not in” guesses (unchecked & should NOT be in)
+        unchecked = universe - checked
+        should_not_be_in = universe - correct_in
+        tn = len(unchecked & should_not_be_in)
+
+        num_correct = tp + tn
+        pts = float(q.points_per_pick) * float(num_correct)
+
+        detail.update({
+            "status": "resolved_checkbox",
+            "normalized_checked": sorted(list(checked)),
+            "normalized_correct_in": sorted(list(correct_in)),
+            "universe_size": len(universe),
+            "tp": tp,
+            "tn": tn,
+            "num_correct": num_correct,
+            "points": pts,
+        })
+        return pts, detail
 
     # Normalize picks / answers based on type
     if q.qtype == "contestant":
@@ -925,7 +1029,7 @@ if (
             questions[qid] = QuestionSpec(**qd)
 
         # Merge in newly detected questions not in saved config
-        for qid, (label, qcols, pguess) in detected.items():
+        for qid, (label, qcols, pguess, is_cb, universe) in detected.items():
             if qid not in questions:
                 qtype_guess = "contestant" if state.get("contestants") else "text"
                 questions[qid] = QuestionSpec(
@@ -935,6 +1039,8 @@ if (
                     qtype=qtype_guess,
                     timing="episode",
                     points_per_pick=pguess or 0,
+                    checkbox_scoring=is_cb,
+                    option_universe=universe,
                 )
             else:
                 # Keep saved settings, but update columns in case headers shifted
@@ -950,6 +1056,8 @@ if (
                 qtype=qtype_guess,
                 timing="episode",
                 points_per_pick=pguess or 0,
+                checkbox_scoring=bool(is_cb),
+                option_universe=list(universe),
             )
 
     st.session_state["working_episode"] = EpisodeSpec(
@@ -971,8 +1079,10 @@ pending_qids, resolved_qids = [], []
 for qid, q in ep.questions.items():
     # Keep columns synced to detection if present
     if qid in detected:
-        _, detected_cols, _ = detected[qid]
+        _, detected_cols, _, is_cb, universe = detected[qid]
         q.columns = detected_cols
+        q.checkbox_scoring = bool(is_cb)
+        q.option_universe = list(universe)
 
     with st.expander(q.label, expanded=False):
         st.caption("Columns captured: " + " | ".join(q.columns))
