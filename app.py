@@ -1021,11 +1021,30 @@ def try_load(sheet_id: str) -> tuple[pd.DataFrame, str, str]:
 
 st.subheader("1) Load this episode’s Google Form responses from Google Sheets")
 
+# ✅ PUT THIS RIGHT HERE (before the sheet_url text_input)
+saved_ids = sorted(state.get("episodes", {}).keys())
+selected = st.selectbox(
+    "Load saved episode",
+    options=["(new)"] + saved_ids,
+    key="load_saved_episode_select",
+)
+
+if selected != "(new)":
+    saved_ep = state["episodes"].get(selected, {})
+    saved_sheet = saved_ep.get("sheet_url", "")
+    if saved_sheet:
+        st.session_state["sheet_url"] = saved_sheet  # ✅ safe now (widget not created yet)
+
+    # Also prefill Episode ID input (Step 2 uses key="episode_id_input")
+    st.session_state["episode_id_input"] = selected
+
+# Now create the actual sheet_url widget
 sheet_url = st.text_input(
     "Paste Google Sheet link (must be 'Anyone with the link can view')",
-    value="",
+    value=st.session_state.get("sheet_url", ""),
     key="sheet_url",
 )
+
 
 load_btn = st.button("Load sheet", type="primary", key="load_sheet_btn")
 
@@ -1101,26 +1120,26 @@ username_col = st.selectbox(
     index=cols.index(username_default) if username_default in cols else 0
 )
 
-# ---- Load saved episode dropdown
-saved_ids = sorted(state.get("episodes", {}).keys())
+# # ---- Load saved episode dropdown
+# saved_ids = sorted(state.get("episodes", {}).keys())
 
-selected = st.selectbox(
-    "Load saved episode",
-    options=["(new)"] + saved_ids,
-    key="load_saved_episode_select",
-)
+# selected = st.selectbox(
+#     "Load saved episode",
+#     options=["(new)"] + saved_ids,
+#     key="load_saved_episode_select",
+# )
 
-if selected != "(new)":
-    # 1) Set the Episode ID text input value (by controlling its session_state)
-    st.session_state["episode_id_input"] = selected
+# if selected != "(new)":
+#     # 1) Set the Episode ID text input value (by controlling its session_state)
+#     st.session_state["episode_id_input"] = selected
 
-    # 2) Also set the sheet URL (Step 1 input uses key="sheet_url")
-    saved_sheet = state["episodes"].get(selected, {}).get("sheet_url", "")
-    if saved_sheet:
-        st.session_state["sheet_url"] = saved_sheet
+#     # 2) Also set the sheet URL (Step 1 input uses key="sheet_url")
+#     saved_sheet = state["episodes"].get(selected, {}).get("sheet_url", "")
+#     if saved_sheet:
+#         st.session_state["sheet_url"] = saved_sheet
 
-    # 3) Force rerun so Step 1 + Step 2 immediately reflect changes
-    st.rerun()
+#     # 3) Force rerun so Step 1 + Step 2 immediately reflect changes
+#     st.rerun()
 
 
 # Episode ID
