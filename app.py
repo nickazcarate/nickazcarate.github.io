@@ -1,3 +1,13 @@
+import os, subprocess
+import streamlit as st
+
+st.sidebar.write("APP FILE:", __file__)
+try:
+    sha = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
+    st.sidebar.write("GIT SHA:", sha)
+except Exception as e:
+    st.sidebar.write("GIT SHA ERROR:", str(e))
+
 from urllib.parse import urlparse, parse_qs
 import json
 import os
