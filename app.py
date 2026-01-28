@@ -878,7 +878,7 @@ def season_leaderboard(state: dict) -> pd.DataFrame:
 # -------------------------
 state = ensure_state_defaults(load_state())
 
-st.title("RuPaul’s Drag Race Bracket Scorer — Flexible (Local)")
+st.title("RuPaul’s Drag Race Bracket Scorer")
 
 with st.sidebar:
     st.header("Season Setup")
@@ -1050,9 +1050,9 @@ if sheet_url and "loaded_df" not in st.session_state:
 # Always show preview if we have a loaded df (even after reruns)
 if "loaded_df" in st.session_state:
     st.success(f"Loaded {len(st.session_state['loaded_df']):,} rows (gid={st.session_state.get('loaded_episode_gid','')}).")
-    st.caption("CSV export URL used (open it in your browser if debugging):")
-    st.code(st.session_state.get("loaded_export_url", ""), language="text")
-    st.write("Preview", st.session_state["loaded_df"].head(30))
+    # st.caption("CSV export URL used (open it in your browser if debugging):")
+    # st.code(st.session_state.get("loaded_export_url", ""), language="text")
+    st.write("Preview", st.session_state["loaded_df"].head(40))
 
 if not sheet_url:
     st.info("Paste the link above, then click **Load sheet**.")
@@ -1100,6 +1100,16 @@ username_col = st.selectbox(
     options=cols,
     index=cols.index(username_default) if username_default in cols else 0
 )
+
+saved_ids = sorted(state.get("episodes", {}).keys())
+selected = st.selectbox("Load saved episode", ["(new)"] + saved_ids)
+
+if selected != "(new)":
+    # set episode_id and sheet_url defaults from saved state
+    episode_id = selected
+    saved_sheet = state["episodes"][selected].get("sheet_url", "")
+    if saved_sheet:
+        st.session_state["sheet_url"] = saved_sheet
 
 # Episode ID
 default_ep_id = f"ep_{st.session_state.get('loaded_episode_gid','0')}"
