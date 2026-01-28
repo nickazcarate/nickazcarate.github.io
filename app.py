@@ -190,6 +190,44 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
 
 import unicodedata
 
+def normalize_unicode_punct(s: str) -> str:
+    """
+    Normalize curly quotes/dashes to plain ASCII.
+    Also fixes common mojibake when it slipped through.
+    """
+    s = norm_text(s)  # uses your NaN handling, turns into string
+    if not s:
+        return ""
+
+    # If mojibake slipped through, try to repair it
+    if "â" in s or "�" in s:
+        try:
+            repaired = s.encode("latin-1", errors="ignore").decode("utf-8", errors="ignore")
+            if repaired:
+                s = repaired
+        except Exception:
+            pass
+
+    # Normalize unicode form
+    s = unicodedata.normalize("NFKC", s)
+
+    # Replace smart quotes/dashes with ASCII
+    trans = {
+        "\u2018": "'",  # left single quote
+        "\u2019": "'",  # right single quote
+        "\u201C": '"',  # left double quote
+        "\u201D": '"',  # right double quote
+        "\u2013": "-",  # en dash
+        "\u2014": "-",  # em dash
+        "\u2212": "-",  # minus sign
+        "\u00A0": " ",  # non-breaking space
+    }
+    s = s.translate(str.maketrans(trans))
+
+    # Collapse whitespace
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
 OTHER_SENTINELS_RAW = {
     "Other (Please Add in Next Question)",
     "Other",
@@ -256,10 +294,11 @@ def effective_username(row: pd.Series, username_col: str) -> str:
 def norm_text(x) -> str:
     if x is None or (isinstance(x, float) and pd.isna(x)) or pd.isna(x):
         return ""
-    return str(x).strip()
+    return normalize_unicode_punct(str(x))
 
 def norm_key(x: str) -> str:
-    return "".join(ch.lower() for ch in norm_text(x) if ch.isalnum() or ch.isspace()).strip()
+    s = normalize_unicode_punct(x)
+    return "".join(ch.lower() for ch in s if ch.isalnum() or ch.isspace()).strip()
 
 def fuzzy_match(name: str, choices: List[str], score_cutoff: int = 86) -> str:
     """Return best matching choice, or original string if no good match."""
@@ -755,12 +794,16 @@ def first_gid_from_public_sheet(sheet_id: str) -> str:
 def load_public_sheet_csv(sheet_id: str, gid: str) -> tuple[pd.DataFrame, str]:
     export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
 
-    # Use requests + UA instead of pd.read_csv(url) (more reliable)
     r = requests.get(export_url, headers=UA, timeout=20)
     if r.status_code != 200:
-        raise ValueError(f"CSV export failed: HTTP {r.status_code}\nURL: {export_url}\nBody: {r.text[:200]}")
+        raise ValueError(
+            f"CSV export failed: HTTP {r.status_code}\nURL: {export_url}\nBody: {r.text[:200]}"
+        )
 
-    df = pd.read_csv(io.StringIO(r.text))
+    # IMPORTANT: decode bytes as UTF-8 (handles curly quotes/em-dashes correctly)
+    csv_text = r.content.decode("utf-8-sig", errors="replace")
+
+    df = pd.read_csv(io.StringIO(csv_text))
     df.columns = [str(c) for c in df.columns]
     return df, export_url
 
