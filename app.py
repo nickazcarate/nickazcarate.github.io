@@ -1,3 +1,4 @@
+from __future__ import annotations
 from urllib.parse import urlparse, parse_qs
 import json
 import os
@@ -1064,7 +1065,7 @@ if run_score:
         new_bonus = award_new_bonuses(state, state.get("contestants", []))
         if new_bonus:
             st.success(f"Awarded new bonuses to {len(new_bonus)} player(s).")
-            
+
         save_state(state)
         write_scores_csv(state)
 
