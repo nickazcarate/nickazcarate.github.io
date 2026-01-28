@@ -1101,21 +1101,35 @@ username_col = st.selectbox(
     index=cols.index(username_default) if username_default in cols else 0
 )
 
+# ---- Load saved episode dropdown
 saved_ids = sorted(state.get("episodes", {}).keys())
-selected = st.selectbox("Load saved episode", ["(new)"] + saved_ids)
+
+selected = st.selectbox(
+    "Load saved episode",
+    options=["(new)"] + saved_ids,
+    key="load_saved_episode_select",
+)
 
 if selected != "(new)":
-    # set episode_id and sheet_url defaults from saved state
-    episode_id = selected
-    saved_sheet = state["episodes"][selected].get("sheet_url", "")
+    # 1) Set the Episode ID text input value (by controlling its session_state)
+    st.session_state["episode_id_input"] = selected
+
+    # 2) Also set the sheet URL (Step 1 input uses key="sheet_url")
+    saved_sheet = state["episodes"].get(selected, {}).get("sheet_url", "")
     if saved_sheet:
         st.session_state["sheet_url"] = saved_sheet
 
+    # 3) Force rerun so Step 1 + Step 2 immediately reflect changes
+    st.rerun()
+
+
 # Episode ID
-default_ep_id = f"ep_{st.session_state.get('loaded_episode_gid','0')}"
+default_ep_id = st.session_state.get("working_episode_id") or str(st.session_state.get("loaded_episode_gid", "0"))
+
 episode_id = st.text_input(
     "Episode ID (Number only, e.g. 2, 3, 4, 5, etc.)",
-    value=st.session_state.get("working_episode_id", default_ep_id)
+    value=default_ep_id,
+    key="episode_id_input",
 )
 
 # Detect question groups for this sheet
