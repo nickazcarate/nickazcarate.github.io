@@ -973,10 +973,7 @@ if not sheet_url:
 if sheet_url and load_btn:
     try:
         sheet_id = sheet_id_from_url(sheet_url)
-
         df, export_url, gid = try_load(sheet_id)
-
-        st.session_state["loaded_export_url"] = export_url
 
         if df.empty:
             st.error("Loaded, but the sheet appears empty. Are you sure responses exist in this sheet?")
@@ -984,18 +981,13 @@ if sheet_url and load_btn:
 
         file_sig = (sheet_id, gid, df.shape, tuple(df.columns))
         if st.session_state.get("loaded_df_sig") != file_sig:
-            st.session_state["loaded_df_sig"] = file_sig
             st.session_state.pop("working_episode", None)
             st.session_state.pop("working_episode_id", None)
 
-        st.session_state["loaded_df"] = df
-        st.session_state["loaded_episode_gid"] = gid
-        st.session_state["loaded_sheet_id"] = sheet_id
+        set_loaded_df(df, export_url, gid, sheet_id)
 
-        st.success(f"Loaded {len(df):,} rows (gid={gid}).")
-        st.caption("CSV export URL used (open it in your browser if debugging):")
-        st.code(export_url, language="text")
-        st.write("Preview", df.head(30))
+        # Optional: a tiny acknowledgement (NOT the preview)
+        st.toast(f"Loaded {len(df):,} rows (gid={gid}).", icon="✅")
 
     except Exception as e:
         st.error(f"Could not load sheet. Error: {e}")
