@@ -1,13 +1,3 @@
-import os, subprocess
-import streamlit as st
-
-st.sidebar.write("APP FILE:", __file__)
-try:
-    sha = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
-    st.sidebar.write("GIT SHA:", sha)
-except Exception as e:
-    st.sidebar.write("GIT SHA ERROR:", str(e))
-
 from urllib.parse import urlparse, parse_qs
 import json
 import os
@@ -996,7 +986,7 @@ if run_score:
 
 
     # After save_state(state) and write_scores_csv(state)
-    owner = "kroegern1"
+    owner = "nickazcarate"
     repo = "nickazcarate.github.io"
     branch = "main"  # or gh-pages, whatever Pages uses
     token = st.secrets["GITHUB_TOKEN"]
