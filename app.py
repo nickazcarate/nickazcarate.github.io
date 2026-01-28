@@ -1152,6 +1152,23 @@ for qid, q in ep.questions.items():
                 key=f"dup_{qid}"
             )
 
+        if q.qtype == "text":
+            q.checkbox_scoring = st.checkbox(
+                "Checkbox universe scoring (award points for correct checked AND unchecked)?",
+                value=bool(getattr(q, "checkbox_scoring", False)),
+                key=f"cbscore_{qid}"
+            )
+
+            if q.checkbox_scoring:
+                uni_raw = st.text_area(
+                    "All possible options (one per line)",
+                    value="\n".join(getattr(q, "option_universe", []) or []),
+                    height=140,
+                    key=f"universe_{qid}"
+                )
+                q.option_universe = [x.strip() for x in uni_raw.splitlines() if x.strip()]
+        
+
         q.no_correct_answer = st.checkbox(
             "No correct answer this time (everyone gets 0)?",
             value=bool(q.no_correct_answer),
