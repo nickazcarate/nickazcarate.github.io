@@ -60,25 +60,25 @@ def github_upsert_file(owner, repo, branch, path, content_bytes, token, commit_m
     return r2.json()
 
 
+def ep_col_name(ep_id: str) -> str:
+    ep_id = str(ep_id).strip()
+    # If you want literally "Ep #2", use: return f"Ep #{ep_id}"
+    return f"Ep {ep_id}"
+
+
 def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
-    """
-    Returns a wide scoreboard:
-      username | <episode_id> | <episode_id> | ... | Total
-    using episodes[*].last_scored_rows[].total
-    """
     episodes = state.get("episodes", {})
     if not episodes:
-        return pd.DataFrame(columns=["username", "Total"])
+        return pd.DataFrame(columns=["Username", "Total"])
 
-    # episode_ids sorted numerically if possible
     def sort_key(x):
         try:
-            return (0, int(x))
+            return (0, int(str(x)))
         except Exception:
             return (1, str(x))
+
     ep_ids = sorted(episodes.keys(), key=sort_key)
 
-    # Collect totals per user per episode
     per_user = {}
     for ep_id in ep_ids:
         rows = episodes.get(ep_id, {}).get("last_scored_rows", [])
@@ -89,21 +89,20 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
             per_user.setdefault(u, {})
             per_user[u][ep_id] = per_user[u].get(ep_id, 0) + int(r.get("total", 0))
 
-    # Build wide df
     out_rows = []
     for u, scores in per_user.items():
         row = {"Username": u}
         total = 0
         for ep_id in ep_ids:
             v = int(scores.get(ep_id, 0))
-            row[ep_id] = v
+            row[ep_col_name(ep_id)] = v     # <-- rename column here
             total += v
         row["Total"] = total
         out_rows.append(row)
 
     df = pd.DataFrame(out_rows)
     if df.empty:
-        return pd.DataFrame(columns=["Username"] + ep_ids + ["Total"])
+        return pd.DataFrame(columns=["Username"] + [ep_col_name(e) for e in ep_ids] + ["Total"])
 
     df = df.sort_values(["Total", "Username"], ascending=[False, True])
     return df
