@@ -192,10 +192,10 @@ import unicodedata
 
 def normalize_unicode_punct(s: str) -> str:
     """
-    Normalize curly quotes/dashes to plain ASCII.
+    Normalize curly quotes/dashes to plain ASCII + collapse whitespace.
     Also fixes common mojibake when it slipped through.
     """
-    s = norm_text(s)  # uses your NaN handling, turns into string
+    s = norm_text(s)
     if not s:
         return ""
 
@@ -243,20 +243,13 @@ FREE_TEXT_USERNAME_COL = "Username (If not in above drop down)"
 
 
 def fix_mojibake(s: str) -> str:
-    """
-    Heuristic fix for common Google Sheets CSV mojibake like:
-      Poinhubâs -> Poinhub’s
-    without adding new deps.
-    """
     s = norm_text(s)
     if not s:
         return s
 
-    # Only attempt when it looks like mojibake
     if "â" in s or "�" in s:
         try:
             repaired = s.encode("latin-1", errors="ignore").decode("utf-8", errors="ignore")
-            # Keep the repaired string only if it looks "better"
             if repaired and repaired.count("�") <= s.count("�"):
                 return repaired
         except Exception:
@@ -291,10 +284,27 @@ def effective_username(row: pd.Series, username_col: str) -> str:
 
     return u
 
+import re
+import unicodedata
+import pandas as pd
+
 def norm_text(x) -> str:
-    if x is None or (isinstance(x, float) and pd.isna(x)) or pd.isna(x):
+    """
+    Convert any value to a safe string:
+      - None/NaN -> ""
+      - strip
+    DOES NOT do unicode punctuation normalization.
+    """
+    if x is None:
         return ""
-    return normalize_unicode_punct(str(x))
+    try:
+        # pd.isna(None) is False, pd.isna("foo") is False, pd.isna(np.nan) is True
+        if pd.isna(x):
+            return ""
+    except Exception:
+        pass
+    return str(x).strip()
+
 
 def norm_key(x: str) -> str:
     s = normalize_unicode_punct(x)
