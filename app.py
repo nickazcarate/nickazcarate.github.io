@@ -50,16 +50,34 @@ def parse_checkbox_option_from_column(col_name: str, base_label: str) -> Optiona
 
 def is_checkbox_group(base_label: str, cols_in_group: List[str]) -> bool:
     """
-    Heuristic: checkbox groups often have MANY columns and the column names
-    look like "<question> <option>" (question repeated in each column).
+    Heuristic: checkbox groups usually have MANY columns like:
+      "<Question text> [Option text]" or "<Question text> - Option text"
+    Do NOT treat "(Pick #1)/(Pick #2)" multi-pick questions as checkbox groups.
     """
-    if len(cols_in_group) < 2:
+
+    # ✅ Multi-pick questions are often only 2–3 cols (Pick #1/#2/#3)
+    # Checkbox grids are usually more than that.
+    if len(cols_in_group) < 4:
+        return False
+
+    # ✅ If these look like multi-pick columns, NOT a checkbox grid
+    pickish = 0
+    for c in cols_in_group:
+        h = norm_text(c)
+        if re.search(r"\(\s*(pick|guess)\s*#?\s*\d+\s*\)\s*$", h, flags=re.IGNORECASE):
+            pickish += 1
+        elif re.search(r"\s*(pick|guess)\s*#?\s*\d+\s*$", h, flags=re.IGNORECASE):
+            pickish += 1
+
+    # If most columns are Pick/Guess columns, it's not a checkbox group
+    if pickish >= max(2, int(0.7 * len(cols_in_group))):
         return False
 
     b = norm_text(base_label)
     starts = sum(1 for c in cols_in_group if norm_text(c).startswith(b))
+
     # if most columns start with the base label, likely checkbox-style
-    return starts >= max(2, int(0.7 * len(cols_in_group)))
+    return starts >= max(3, int(0.7 * len(cols_in_group)))
 
 def derive_option_universe(base_label: str, cols_in_group: List[str]) -> List[str]:
     """
@@ -611,13 +629,19 @@ def apply_implied_outcomes(ep: EpisodeSpec) -> None:
         if ("who will win" in lk) or ("winner" in lk and "season" not in lk and "superstar" not in lk):
             winner_qids.append(qid)
         # top group
-        if ("top" in lk) and ("who else" in lk or "top 3" in lk or "top three" in lk or "top group" in lk):
+        if "top" in lk and any(s in lk for s in ["top 3", "top three", "top group", "who else will be in the top", "who else is in the top"]):
             top_qids.append(qid)
         # eliminated
         if ("who will be eliminated" in lk) or ("eliminated" in lk):
             elim_qids.append(qid)
         # bottom group
-        if ("bottom" in lk) and ("who else" in lk or "bottom 3" in lk or "bottom three" in lk or "bottom group" in lk):
+        if "bottom" in lk and any(s in lk for s in [
+            "bottom 3", "bottom three",
+            "bottom 2", "bottom two",
+            "bottom group",
+            "who else will be in the bottom", "who else is in the bottom",
+            "who will be in the bottom", "in the bottom"
+        ]):
             bottom_qids.append(qid)
 
     def merge_answers(src_qids: List[str], dst_qids: List[str]) -> None:
@@ -723,16 +747,66 @@ def score_question_picks(
     if ep and q.qtype == "contestant" and pts == 0 and picks_norm:
         lk = norm_key(q.label)
 
-        def find_first_question_by_keywords(must_contain: List[str]) -> Optional[QuestionSpec]:
+        def find_best_bucket_question(bucket: str) -> Optional[QuestionSpec]:
+            """
+            Pick the most likely "top/bottom bucket" question.
+            Prefers:
+              1) labels that explicitly say top 2/3 or bottom 2/3
+              2) questions with multiple pick columns (Pick #1/#2)
+              3) labels that contain "who else" / "in the top" / "in the bottom"
+            """
+            bucket = norm_key(bucket)  # "top" or "bottom"
+            candidates = []
+
             for _qid, _q in ep.questions.items():
-                k = norm_key(_q.label)
-                if all(s in k for s in must_contain):
-                    return _q
-            return None
+                lk = norm_key(_q.label)
+
+                if bucket not in lk:
+                    continue
+
+                score = 0
+
+                # Strong signals: explicit bucket sizes
+                if bucket == "top":
+                    if any(s in lk for s in ["top 3", "top three"]):
+                        score += 100
+                    if any(s in lk for s in ["top 2", "top two"]):
+                        score += 90
+                if bucket == "bottom":
+                    if any(s in lk for s in ["bottom 3", "bottom three"]):
+                        score += 100
+                    if any(s in lk for s in ["bottom 2", "bottom two"]):
+                        score += 90
+
+                # Multi-pick columns usually means it's the bucket question
+                if len(getattr(_q, "columns", []) or []) >= 2:
+                    score += 30
+
+                # Common phrasing used by your forms
+                if "who else" in lk:
+                    score += 10
+                if f"in the {bucket}" in lk or f"in {bucket}" in lk:
+                    score += 8
+
+                # Penalize likely wrong matches (tune as needed)
+                if "runway" in lk:
+                    score -= 25
+                if "color" in lk:
+                    score -= 25
+                if "lip sync" in lk or "lipsync" in lk:
+                    score -= 25
+
+                candidates.append((score, _q))
+
+            if not candidates:
+                return None
+
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            return candidates[0][1]
 
         # Winner -> Top fallback
         if "who will win" in lk or ("winner" in lk and "season" not in lk and "superstar" not in lk):
-            top_q = find_first_question_by_keywords(["top"])
+            top_q = find_best_bucket_question("top")
             if top_q and top_q.correct_answers:
                 top_set = set(fuzzy_match(a, contestants) for a in top_q.correct_answers) if contestants else set(top_q.correct_answers)
                 if picks_norm[0] in top_set:
@@ -741,7 +815,7 @@ def score_question_picks(
 
         # Eliminated -> Bottom fallback
         if "who will be eliminated" in lk or "eliminated" in lk:
-            bottom_q = find_first_question_by_keywords(["bottom"])
+            bottom_q = find_best_bucket_question("bottom")
             if bottom_q and bottom_q.correct_answers:
                 bottom_set = set(fuzzy_match(a, contestants) for a in bottom_q.correct_answers) if contestants else set(bottom_q.correct_answers)
                 if picks_norm[0] in bottom_set:
@@ -1232,6 +1306,7 @@ if save_ep:
     if not ep.episode_id or ep.episode_id == "UNNAMED":
         st.error("Please enter an Episode ID/label before saving.")
     else:
+        apply_implied_outcomes(ep) 
         prev = state["episodes"].get(ep.episode_id, {})
 
         existing_rows = prev.get("last_scored_rows", [])
