@@ -702,7 +702,7 @@
           ],
           "qtype": "text",
           "timing": "episode",
-          "points_per_pick": 0.0,
+          "points_per_pick": 0.5,
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [
