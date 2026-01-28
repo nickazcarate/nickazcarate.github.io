@@ -1,5 +1,5 @@
 {
-  "season_name": "Drag Race Season",
+  "season_name": "Drag Race Season 18",
   "contestants": [
     "Juicy Love Dion",
     "Darlene Mitchell",
@@ -18,6 +18,7 @@
   ],
   "episodes": {
     "2": {
+      "season_picks": {},
       "episode_id": "2",
       "sheet_url": "https://docs.google.com/spreadsheets/d/11sP7MWa4dyG1uE96kPHudlJbTldYcmGUTRC6x3F1A10/edit?usp=sharing",
       "username_col": "Username",
@@ -34,7 +35,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_win_this_episode_5_points": {
           "qid": "who_will_win_this_episode_5_points",
@@ -50,7 +52,8 @@
           "correct_answers": [
             "Jane Don't"
           ],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_lip_sync_this_episode_3_points": {
           "qid": "who_will_lip_sync_this_episode_3_points",
@@ -65,9 +68,11 @@
           "allow_duplicate_picks": true,
           "no_correct_answer": false,
           "correct_answers": [
-            "DD Fuego"
+            "DD Fuego",
+            "Mandy Mango"
           ],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_be_eliminated_5_points": {
           "qid": "who_will_be_eliminated_5_points",
@@ -80,8 +85,11 @@
           "points_per_pick": 5,
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
-          "correct_answers": [],
-          "notes": ""
+          "correct_answers": [
+            "DD Fuego"
+          ],
+          "notes": "",
+          "paid": false
         },
         "what_song_will_be_the_lipsync_song_this_episode_3_points": {
           "qid": "what_song_will_be_the_lipsync_song_this_episode_3_points",
@@ -89,13 +97,17 @@
           "columns": [
             "What song will be the lip-sync song this episode? (3 points)"
           ],
-          "qtype": "contestant",
+          "qtype": "text",
           "timing": "episode",
           "points_per_pick": 3,
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
-          "correct_answers": [],
-          "notes": ""
+          "correct_answers": [
+            "Too Much - Dove Cameron",
+            "Too Much — Dove Cameron"
+          ],
+          "notes": "",
+          "paid": false
         },
         "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": {
           "qid": "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points",
@@ -109,7 +121,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_be_miss_congeniality_10_points": {
           "qid": "who_will_be_miss_congeniality_10_points",
@@ -123,7 +136,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": {
           "qid": "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season",
@@ -137,7 +151,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": {
           "qid": "who_will_be_the_villain_of_the_season_5_points_majority_decides_later",
@@ -151,7 +166,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_is_trade_of_the_season_5_points_majority_decides_winner": {
           "qid": "who_is_trade_of_the_season_5_points_majority_decides_winner",
@@ -162,10 +178,14 @@
           "qtype": "contestant",
           "timing": "episode",
           "points_per_pick": 5,
-          "allow_duplicate_picks": false,
+          "allow_duplicate_picks": true,
           "no_correct_answer": false,
-          "correct_answers": [],
-          "notes": ""
+          "correct_answers": [
+            "Athena Dion",
+            "Nini Coco"
+          ],
+          "notes": "",
+          "paid": false
         },
         "who_will_have_the_most_maxi_challenge_wins_5_points": {
           "qid": "who_will_have_the_most_maxi_challenge_wins_5_points",
@@ -179,7 +199,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": {
           "qid": "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points",
@@ -193,7 +214,8 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         },
         "what_will_be_the_rusical_theme_10_points": {
           "qid": "what_will_be_the_rusical_theme_10_points",
@@ -207,13 +229,14 @@
           "allow_duplicate_picks": false,
           "no_correct_answer": false,
           "correct_answers": [],
-          "notes": ""
+          "notes": "",
+          "paid": false
         }
       },
       "last_scored_rows": [
         {
           "username": "Actually gonna Sharr-own y'all",
-          "total": 0,
+          "total": 5,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 0,
@@ -223,31 +246,14 @@
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Adilldo",
-          "total": 0,
-          "username_if_not_in_above_drop_down": 0,
-          "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
-          "who_will_be_eliminated_5_points": 0,
-          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
-          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
-          "who_will_be_miss_congeniality_10_points": 0,
-          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
-          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
-          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
-          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
-          "what_will_be_the_rusical_theme_10_points": 0
-        },
-        {
-          "username": "Apollo & Co.",
-          "total": 3,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 3,
@@ -257,34 +263,51 @@
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
+          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
+          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
+          "what_will_be_the_rusical_theme_10_points": 0
+        },
+        {
+          "username": "Apollo & Co.",
+          "total": 13,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
+          "who_will_be_eliminated_5_points": 5,
+          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
+          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
+          "who_will_be_miss_congeniality_10_points": 0,
+          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
+          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Chat-GPTea",
-          "total": 0,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "drtangerine",
-          "total": 0,
+          "total": 3,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
@@ -315,7 +338,7 @@
         },
         {
           "username": "Gay-me-in the Clunt-bauer",
-          "total": 3,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 3,
@@ -325,17 +348,17 @@
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Jane Oh No She Betta Don't",
-          "total": 0,
+          "total": 3,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
@@ -349,57 +372,6 @@
         },
         {
           "username": "Jedsterz Jesters",
-          "total": 0,
-          "username_if_not_in_above_drop_down": 0,
-          "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
-          "who_will_be_eliminated_5_points": 0,
-          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
-          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
-          "who_will_be_miss_congeniality_10_points": 0,
-          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
-          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
-          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
-          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
-          "what_will_be_the_rusical_theme_10_points": 0
-        },
-        {
-          "username": "Miley Chondria",
-          "total": 5,
-          "username_if_not_in_above_drop_down": 0,
-          "who_will_win_this_episode_5_points": 5,
-          "who_will_lip_sync_this_episode_3_points": 0,
-          "who_will_be_eliminated_5_points": 0,
-          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
-          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
-          "who_will_be_miss_congeniality_10_points": 0,
-          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
-          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
-          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
-          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
-          "what_will_be_the_rusical_theme_10_points": 0
-        },
-        {
-          "username": "nicolandio",
-          "total": 5,
-          "username_if_not_in_above_drop_down": 0,
-          "who_will_win_this_episode_5_points": 5,
-          "who_will_lip_sync_this_episode_3_points": 0,
-          "who_will_be_eliminated_5_points": 0,
-          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
-          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
-          "who_will_be_miss_congeniality_10_points": 0,
-          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
-          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
-          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
-          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
-          "what_will_be_the_rusical_theme_10_points": 0
-        },
-        {
-          "username": "Sodapopshane",
           "total": 3,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
@@ -416,13 +388,64 @@
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
+          "username": "Miley Chondria",
+          "total": 13,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 5,
+          "who_will_lip_sync_this_episode_3_points": 3,
+          "who_will_be_eliminated_5_points": 0,
+          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
+          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
+          "who_will_be_miss_congeniality_10_points": 0,
+          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
+          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
+          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
+          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
+          "what_will_be_the_rusical_theme_10_points": 0
+        },
+        {
+          "username": "nicolandio",
+          "total": 10,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 5,
+          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_be_eliminated_5_points": 0,
+          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
+          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
+          "who_will_be_miss_congeniality_10_points": 0,
+          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
+          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
+          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
+          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
+          "what_will_be_the_rusical_theme_10_points": 0
+        },
+        {
+          "username": "Sodapopshane",
+          "total": 13,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
+          "who_will_be_eliminated_5_points": 5,
+          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
+          "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
+          "who_will_be_miss_congeniality_10_points": 0,
+          "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
+          "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
+          "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
+          "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
+          "what_will_be_the_rusical_theme_10_points": 0
+        },
+        {
           "username": "Petty Nick",
-          "total": 0,
+          "total": 3,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 0,
           "who_will_be_eliminated_5_points": 0,
-          "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
+          "what_song_will_be_the_lipsync_song_this_episode_3_points": 3,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
@@ -434,28 +457,28 @@
         },
         {
           "username": "PacaPacaPaca",
-          "total": 0,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Poinhub’s Cummy Back",
-          "total": 8,
+          "total": 16,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 5,
-          "who_will_lip_sync_this_episode_3_points": 3,
-          "who_will_be_eliminated_5_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 6,
+          "who_will_be_eliminated_5_points": 5,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
           "who_will_be_miss_congeniality_10_points": 0,
@@ -485,7 +508,7 @@
         },
         {
           "username": "Sweet As St. Lucia",
-          "total": 3,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 3,
@@ -495,31 +518,31 @@
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Thank You Thank You",
-          "total": 0,
+          "total": 8,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "that’s so eric",
-          "total": 0,
+          "total": 5,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
           "who_will_lip_sync_this_episode_3_points": 0,
@@ -529,17 +552,17 @@
           "who_will_be_miss_congeniality_10_points": 0,
           "who_will_win_the_golden_boot_5_points_ugliest_outfit_this_season": 0,
           "who_will_be_the_villain_of_the_season_5_points_majority_decides_later": 0,
-          "who_is_trade_of_the_season_5_points_majority_decides_winner": 0,
+          "who_is_trade_of_the_season_5_points_majority_decides_winner": 5,
           "who_will_have_the_most_maxi_challenge_wins_5_points": 0,
           "who_will_win_the_most_money_throughout_the_season_excluding_winner_5_points": 0,
           "what_will_be_the_rusical_theme_10_points": 0
         },
         {
           "username": "Umami Thurman",
-          "total": 0,
+          "total": 3,
           "username_if_not_in_above_drop_down": 0,
           "who_will_win_this_episode_5_points": 0,
-          "who_will_lip_sync_this_episode_3_points": 0,
+          "who_will_lip_sync_this_episode_3_points": 3,
           "who_will_be_eliminated_5_points": 0,
           "what_song_will_be_the_lipsync_song_this_episode_3_points": 0,
           "who_will_be_the_seasons_lipsync_assassin_most_lipsync_wins_5_points": 0,
@@ -555,5 +578,6 @@
       "last_export_url": "https://docs.google.com/spreadsheets/d/11sP7MWa4dyG1uE96kPHudlJbTldYcmGUTRC6x3F1A10/export?format=csv&gid=1794508812",
       "last_gid_used": "1794508812"
     }
-  }
+  },
+  "bonus_by_user": {}
 }
