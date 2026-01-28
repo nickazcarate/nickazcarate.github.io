@@ -498,9 +498,9 @@ def ensure_state_defaults(state: dict) -> dict:
 # -------------------------
 # Auto-detect questions from a dataframe
 # -------------------------
-def detect_question_groups(df: pd.DataFrame, username_col: str) -> Dict[str, Tuple[str, List[str], int]]:
+def detect_question_groups(df: pd.DataFrame, username_col: str) -> Dict[str, Tuple[str, List[str], int, bool, List[str]]]:
     """
-    Returns dict: qid -> (label, columns, points_per_pick_guess)
+    Returns dict: qid -> (label, columns, points_per_pick_guess, is_checkbox, option_universe)
     - label is the grouped header
     - columns is ordered by pick index
     - points_per_pick_guess is extracted from the first column that has points.
@@ -632,7 +632,7 @@ def score_question_picks(
     q: QuestionSpec,
     contestants: List[str],
     ep: Optional[EpisodeSpec] = None,  # optional so existing callers can pass it
-) -> Tuple[int, Dict[str, object]]:
+) -> Tuple[float, Dict[str, object]]:
     """
     Scores a single question for one response row.
     Adds optional "bucket fallback" behavior:
@@ -1031,7 +1031,10 @@ if (
         # Merge in newly detected questions not in saved config
         for qid, (label, qcols, pguess, is_cb, universe) in detected.items():
             if qid not in questions:
-                qtype_guess = "contestant" if state.get("contestants") else "text"
+                if is_cb:
+                    qtype_guess = "text"
+                else:
+                    qtype_guess = "contestant" if state.get("contestants") else "text"
                 questions[qid] = QuestionSpec(
                     qid=qid,
                     label=label,
@@ -1043,19 +1046,25 @@ if (
                     option_universe=universe,
                 )
             else:
-                # Keep saved settings, but update columns in case headers shifted
                 questions[qid].columns = qcols
+                questions[qid].checkbox_scoring = bool(is_cb)
+                questions[qid].option_universe = list(universe)
     else:
         # Fresh init from detection
-        for qid, (label, qcols, pguess) in detected.items():
-            qtype_guess = "contestant" if state.get("contestants") else "text"
+        for qid, (label, qcols, pguess, is_cb, universe) in detected.items():
+            # IMPORTANT: checkbox questions should default to text
+            if is_cb:
+                qtype_guess = "text"
+            else:
+                qtype_guess = "contestant" if state.get("contestants") else "text"
+
             questions[qid] = QuestionSpec(
                 qid=qid,
                 label=label,
                 columns=qcols,
                 qtype=qtype_guess,
                 timing="episode",
-                points_per_pick=pguess or 0,
+                points_per_pick=float(pguess or 0.0),
                 checkbox_scoring=bool(is_cb),
                 option_universe=list(universe),
             )
