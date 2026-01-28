@@ -905,10 +905,35 @@ with st.sidebar:
 
         csv_bytes = scores_df.to_csv(index=False).encode("utf-8")
 
-    if st.button("Reset season state (danger)"):
+    st.divider()
+    st.subheader("Danger Zone")
+
+    st.caption("Resetting will permanently erase the season_state.json data for this season.")
+
+    confirm_reset = st.checkbox("I understand this will erase the season state.", key="confirm_reset")
+
+    confirm_phrase = st.text_input(
+        "Type RESET to enable the reset button",
+        value="",
+        key="confirm_reset_phrase",
+    )
+
+    reset_enabled = confirm_reset and (confirm_phrase.strip().upper() == "RESET")
+
+    if st.button("Reset season state (danger)", type="secondary", disabled=not reset_enabled):
         state = ensure_state_defaults({})
         save_state(state)
+
+        # optional: clear relevant session state too, so UI doesn't show stale loaded stuff
+        for k in [
+            "loaded_df", "loaded_export_url", "loaded_episode_gid", "loaded_sheet_id", "loaded_df_sig",
+            "working_episode", "working_episode_id",
+            "confirm_reset", "confirm_reset_phrase",
+        ]:
+            st.session_state.pop(k, None)
+
         st.warning("Season state reset.")
+        st.rerun()
 
 
 
@@ -1119,28 +1144,6 @@ username_col = st.selectbox(
     options=cols,
     index=cols.index(username_default) if username_default in cols else 0
 )
-
-# # ---- Load saved episode dropdown
-# saved_ids = sorted(state.get("episodes", {}).keys())
-
-# selected = st.selectbox(
-#     "Load saved episode",
-#     options=["(new)"] + saved_ids,
-#     key="load_saved_episode_select",
-# )
-
-# if selected != "(new)":
-#     # 1) Set the Episode ID text input value (by controlling its session_state)
-#     st.session_state["episode_id_input"] = selected
-
-#     # 2) Also set the sheet URL (Step 1 input uses key="sheet_url")
-#     saved_sheet = state["episodes"].get(selected, {}).get("sheet_url", "")
-#     if saved_sheet:
-#         st.session_state["sheet_url"] = saved_sheet
-
-#     # 3) Force rerun so Step 1 + Step 2 immediately reflect changes
-#     st.rerun()
-
 
 # Episode ID
 default_ep_id = st.session_state.get("working_episode_id") or str(st.session_state.get("loaded_episode_gid", "0"))
