@@ -959,17 +959,6 @@ if sheet_url and "loaded_df" not in st.session_state:
         st.error(f"Could not auto-reload sheet: {e}")
         st.stop()
 
-# Your existing manual load button can still force a refresh
-if sheet_url and load_btn:
-    try:
-        sheet_id = sheet_id_from_url(sheet_url)
-        df, export_url, gid = try_load(sheet_id)
-        set_loaded_df(df, export_url, gid, sheet_id)
-        st.success(f"Loaded {len(df):,} rows (gid={gid}).")
-    except Exception as e:
-        st.error(f"Could not load sheet. Error: {e}")
-        st.stop()
-
 # Always show preview if we have a loaded df (even after reruns)
 if "loaded_df" in st.session_state:
     st.success(f"Loaded {len(st.session_state['loaded_df']):,} rows (gid={st.session_state.get('loaded_episode_gid','')}).")
