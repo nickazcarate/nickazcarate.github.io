@@ -62,11 +62,11 @@ def award_new_bonuses(state: dict, contestants: List[str]) -> Dict[str, int]:
             # Award for each user who answered back then
             for username, picks in season_picks[qid].items():
                 pts, _ = score_question_picks(picks, q, contestants, ep=None)
-                pts = int(pts)
+                pts = float(pts)
 
                 if pts:
-                    state["bonus_by_user"][username] = int(state["bonus_by_user"].get(username, 0)) + pts
-                    newly_awarded[username] = newly_awarded.get(username, 0) + pts
+                    state["bonus_by_user"][username] = float(state["bonus_by_user"].get(username, 0.0)) + pts
+                    newly_awarded[username] = float(newly_awarded.get(username, 0.0)) + pts
 
             # Mark question paid so it won’t award again
             q.paid = True
@@ -158,7 +158,7 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
             if not u:
                 continue
             per_user_ep.setdefault(u, {})
-            per_user_ep[u][ep_id] = per_user_ep[u].get(ep_id, 0) + int(r.get("total", 0))
+            per_user_ep[u][ep_id] = float(per_user_ep[u].get(ep_id, 0.0)) + float(r.get("total", 0.0))
 
     # union of users from episodes + bonuses
     users = set(per_user_ep.keys()) | set(canonical_username(u) for u in bonus_by_user.keys())
@@ -169,11 +169,11 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
         episode_total = 0
 
         for ep_id in ep_ids:
-            v = int(per_user_ep.get(u, {}).get(ep_id, 0))
+            v = float(per_user_ep.get(u, {}).get(ep_id, 0.0))
             row[ep_col_name(ep_id)] = v
             episode_total += v
 
-        bonus = int(bonus_by_user.get(u, 0))
+        bonus = float(bonus_by_user.get(u, 0.0))
         row["Bonus"] = bonus
         row["Episode Total"] = episode_total
         row["Grand Total"] = episode_total + bonus
@@ -993,9 +993,11 @@ for qid, q in ep.questions.items():
         with c3:
             q.points_per_pick = st.number_input(
                 "Points per pick",
-                value=int(q.points_per_pick or 0),
-                step=1,
-                key=f"pts_{qid}"
+                min_value=0.0,
+                value=float(q.points_per_pick or 0.0),
+                step=0.5,
+                format="%.2f",
+                key=f"pts_{qid}",
             )
         with c4:
             q.allow_duplicate_picks = st.checkbox(
@@ -1095,6 +1097,10 @@ if run_score:
 
     scored_df, leaderboard_df = score_episode_df(df, ep, state.get("contestants", []))
     store_season_picks(state, ep, df)
+
+    # ✅ Add this here (display-only polish)
+    scored_df["total"] = scored_df["total"].round(2)
+    leaderboard_df["total"] = leaderboard_df["total"].round(2)
 
     st.subheader(f"Episode Leaderboard: {ep.episode_id}")
     st.dataframe(leaderboard_df, use_container_width=True)
