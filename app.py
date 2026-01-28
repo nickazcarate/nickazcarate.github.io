@@ -569,6 +569,20 @@ def parse_text_answers(raw: str) -> List[str]:
     return [p for p in parts if p]
 
 def get_row_picks(row: pd.Series, columns: List[str]) -> List[str]:
+    # Single-column text answer that may contain comma-separated selections
+    if len(columns) == 1:
+        v = norm_text(row.get(columns[0], ""))
+
+        # Treat common numeric/falsey exports as "no selection"
+        if v in ("0", "0.0", "False", "FALSE", "No", "NO"):
+            return []
+
+        # If it's a checkbox response in one cell, split it
+        # (works for comma-separated or one-per-line)
+        picks = parse_text_answers(v)
+        return picks
+
+    # Default behavior for multi-column questions
     picks = []
     for c in columns:
         v = norm_text(row.get(c, ""))
