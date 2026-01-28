@@ -10,6 +10,9 @@ import streamlit as st
 from rapidfuzz import process, fuzz
 
 import requests
+
+import base64
+import requests
 from urllib.parse import urlparse, parse_qs, unquote
 
 
@@ -26,6 +29,35 @@ def write_scores_csv(state: dict) -> pd.DataFrame:
     scores_df = build_scores_csv_from_state(state)
     scores_df.to_csv(SCORES_CSV_PATH, index=False)
     return scores_df
+
+
+def github_upsert_file(owner, repo, branch, path, content_bytes, token, commit_message):
+    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github+json",
+    }
+
+    # Get existing file SHA (if it exists)
+    r = requests.get(url, headers=headers, params={"ref": branch})
+    sha = None
+    if r.status_code == 200:
+        sha = r.json().get("sha")
+    elif r.status_code not in (404,):
+        raise RuntimeError(f"GitHub GET failed: {r.status_code} {r.text}")
+
+    payload = {
+        "message": commit_message,
+        "content": base64.b64encode(content_bytes).decode("utf-8"),
+        "branch": branch,
+    }
+    if sha:
+        payload["sha"] = sha
+
+    r2 = requests.put(url, headers=headers, json=payload)
+    if r2.status_code not in (200, 201):
+        raise RuntimeError(f"GitHub PUT failed: {r2.status_code} {r2.text}")
+    return r2.json()
 
 
 def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
@@ -951,6 +983,26 @@ if run_score:
         })
         save_state(state)
         write_scores_csv(state)
+
+
+    # After save_state(state) and write_scores_csv(state)
+    owner = "kroegern1"
+    repo = "nickazcarate.github.io"
+    branch = "main"  # or gh-pages, whatever Pages uses
+    token = st.secrets["GITHUB_TOKEN"]
+
+    # Push season_state.json
+    with open(STATE_PATH, "rb") as f:
+        github_upsert_file(owner, repo, branch, STATE_PATH, f.read(), token,
+                           commit_message=f"Update state for {ep.episode_id}")
+
+    # Push scores.csv
+    with open(SCORES_CSV_PATH, "rb") as f:
+        github_upsert_file(owner, repo, branch, SCORES_CSV_PATH, f.read(), token,
+                           commit_message=f"Update scores for {ep.episode_id}")
+
+    st.success("Pushed updates to GitHub ✅ (Pages will update after rebuild)")
+
 
     st.download_button(
         "Download this episode breakdown CSV",
