@@ -1115,6 +1115,11 @@ if sheet_url and load_btn:
             st.session_state.pop("working_episode", None)
             st.session_state.pop("working_episode_id", None)
 
+            # Clear prior score outputs when switching sheets
+            st.session_state.pop("last_scored_episode_id", None)
+            st.session_state.pop("last_leaderboard_df", None)
+            st.session_state.pop("last_scored_df", None)
+
         set_loaded_df(df, export_url, gid, sheet_id)
 
         # Optional: a tiny acknowledgement (NOT the preview)
@@ -1377,15 +1382,13 @@ if run_score:
     scored_df, leaderboard_df = score_episode_df(df, ep, state.get("contestants", []))
     store_season_picks(state, ep, df)
 
-    # ✅ Add this here (display-only polish)
     scored_df["total"] = scored_df["total"].round(2)
     leaderboard_df["total"] = leaderboard_df["total"].round(2)
 
-    st.subheader(f"Episode Leaderboard: {ep.episode_id}")
-    st.dataframe(leaderboard_df, use_container_width=True)
-
-    st.subheader("Per-response breakdown (this episode)")
-    st.dataframe(scored_df.sort_values("total", ascending=False), use_container_width=True)
+    # Persist results so they don't disappear on reruns
+    st.session_state["last_scored_episode_id"] = ep.episode_id
+    st.session_state["last_leaderboard_df"] = leaderboard_df
+    st.session_state["last_scored_df"] = scored_df
 
     # Persist results for season leaderboard
     if ep.episode_id and ep.episode_id != "UNNAMED":
@@ -1408,38 +1411,56 @@ if run_score:
         write_scores_csv(state)
 
 
-    # After save_state(state) and write_scores_csv(state)
-    owner = "nickazcarate"
-    repo = "nickazcarate.github.io"
-    branch = "main"  # or gh-pages, whatever Pages uses
-    token = st.secrets["GITHUB_TOKEN"]
+        try:
+            owner = "nickazcarate"
+            repo = "nickazcarate.github.io"
+            branch = "main"  # or gh-pages, whatever Pages uses
+            token = st.secrets["GITHUB_TOKEN"]
 
-    # Push season_state.json
-    with open(STATE_PATH, "rb") as f:
-        github_upsert_file(owner, repo, branch, STATE_PATH, f.read(), token,
-                           commit_message=f"Update state for {ep.episode_id}")
+            # Push season_state.json
+            with open(STATE_PATH, "rb") as f:
+                github_upsert_file(owner, repo, branch, STATE_PATH, f.read(), token,
+                                commit_message=f"Update state for {ep.episode_id}")
 
-    # Push scores.csv
-    with open(SCORES_CSV_PATH, "rb") as f:
-        github_upsert_file(owner, repo, branch, SCORES_CSV_PATH, f.read(), token,
-                           commit_message=f"Update scores for {ep.episode_id}")
+            # Push scores.csv
+            with open(SCORES_CSV_PATH, "rb") as f:
+                github_upsert_file(owner, repo, branch, SCORES_CSV_PATH, f.read(), token,
+                                commit_message=f"Update scores for {ep.episode_id}")
 
-    st.success("Pushed updates to GitHub ✅ (Pages will update after rebuild)")
+            st.success("Pushed updates to GitHub ✅ (Pages will update after rebuild)")
+        except Exception as e:
+            st.error(f"GitHub push failed (scores are still computed locally): {e}")
 
+
+# -------------------------
+# Persisted results display (survives reruns)
+# -------------------------
+if "last_scored_df" in st.session_state and "last_leaderboard_df" in st.session_state:
+    last_ep = st.session_state.get("last_scored_episode_id", "")
+
+    st.subheader(f"Episode Leaderboard: {last_ep}")
+    st.dataframe(st.session_state["last_leaderboard_df"], use_container_width=True)
+
+    st.subheader("Per-response breakdown (this episode)")
+    st.dataframe(
+        st.session_state["last_scored_df"].sort_values("total", ascending=False),
+        use_container_width=True
+    )
 
     st.download_button(
         "Download this episode breakdown CSV",
-        data=scored_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"{ep.episode_id}_breakdown.csv",
+        data=st.session_state["last_scored_df"].to_csv(index=False).encode("utf-8"),
+        file_name=f"{last_ep}_breakdown.csv",
         mime="text/csv",
     )
 
     st.download_button(
         "Download this episode leaderboard CSV",
-        data=leaderboard_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"{ep.episode_id}_leaderboard.csv",
+        data=st.session_state["last_leaderboard_df"].to_csv(index=False).encode("utf-8"),
+        file_name=f"{last_ep}_leaderboard.csv",
         mime="text/csv",
     )
+
 
 st.divider()
 st.subheader("Season Leaderboard (across saved episodes)")
