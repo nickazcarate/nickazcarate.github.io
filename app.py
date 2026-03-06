@@ -223,7 +223,7 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
     bonus_by_user = state.get("bonus_by_user", {})  # username -> bonus
 
     if not episodes and not bonus_by_user:
-        return pd.DataFrame(columns=["Username", "Bonus", "Episode Total", "Grand Total"])
+        return pd.DataFrame(columns=["Username", "Bonus", "Grand Total"])
 
     def sort_key(x):
         try:
@@ -259,7 +259,6 @@ def build_scores_csv_from_state(state: dict) -> pd.DataFrame:
 
         bonus = float(bonus_by_user.get(u, 0.0))
         row["Bonus"] = bonus
-        row["Episode Total"] = episode_total
         row["Grand Total"] = episode_total + bonus
         out_rows.append(row)
 
@@ -1150,7 +1149,7 @@ username_col = st.selectbox(
 )
 
 # Episode ID
-default_ep_id = st.session_state.get("working_episode_id") or str(st.session_state.get("loaded_episode_gid", "0"))
+default_ep_id = "@@@ NULL @@@ enter this you silly" #st.session_state.get("working_episode_id") or str(st.session_state.get("loaded_episode_gid", "0"))
 
 episode_id = st.text_input(
     "Episode ID (Number only, e.g. 2, 3, 4, 5, etc.)",
