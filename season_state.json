@@ -1668,7 +1668,6 @@
       "last_gid_used": "972572395"
     },
     "5": {
-      "season_picks": {},
       "episode_id": "5",
       "sheet_url": "https://docs.google.com/spreadsheets/d/1CQjMjdUDa9c-ovUNFTavAfUcj90JJ4zAkPUhhDqEz10/edit?usp=sharing",
       "username_col": "Username",
@@ -2044,7 +2043,8 @@
         }
       ],
       "last_export_url": "https://docs.google.com/spreadsheets/d/1CQjMjdUDa9c-ovUNFTavAfUcj90JJ4zAkPUhhDqEz10/export?format=csv&gid=1314004308",
-      "last_gid_used": "1314004308"
+      "last_gid_used": "1314004308",
+      "season_picks": {}
     }
   },
   "bonus_by_user": {}
