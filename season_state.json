@@ -3860,7 +3860,7 @@
           "qtype": "contestant",
           "timing": "episode",
           "points_per_pick": 0.0,
-          "no_correct_answer": false,
+          "no_correct_answer": true,
           "correct_answers": [],
           "notes": "",
           "paid": false,
