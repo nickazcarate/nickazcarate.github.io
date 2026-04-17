@@ -4256,6 +4256,319 @@
       ],
       "last_export_url": "https://docs.google.com/spreadsheets/d/1cKMo_O0HBL2YUogSpXUJW7r7s9ZGWhHC2x---hAA8nQ/export?format=csv&gid=1055178236",
       "last_gid_used": "1055178236"
+    },
+    "12": {
+      "season_picks": {},
+      "episode_id": "12",
+      "sheet_url": "https://docs.google.com/spreadsheets/d/1FtG6r3md6Bdf7H87hw0t8LSn_9WmuUQHugMrbhaJbyw/edit?usp=sharing",
+      "username_col": "Username",
+      "questions": {
+        "username_if_not_in_above_drop_down": {
+          "qid": "username_if_not_in_above_drop_down",
+          "label": "Username (If not in above drop down)",
+          "columns": [
+            "Username (If not in above drop down)"
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 0.0,
+          "no_correct_answer": true,
+          "correct_answers": [],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "who_will_win_this_episode_5_points": {
+          "qid": "who_will_win_this_episode_5_points",
+          "label": "Who will win this episode? (5 Points)",
+          "columns": [
+            "Who will win this episode? (5 Points)"
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 5.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Myki Meeks"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "who_else_will_be_in_the_top_of_the_episode_2_points": {
+          "qid": "who_else_will_be_in_the_top_of_the_episode_2_points",
+          "label": "Who else will be in the top of the episode? (2 points)",
+          "columns": [
+            "Who else will be in the top of the episode? (2 points)"
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 2.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Darlene Mitchell",
+            "Myki Meeks"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "who_else_will_be_in_the_top_3_2_points": {
+          "qid": "who_else_will_be_in_the_top_3_2_points",
+          "label": "Who else will be in the top 3? (2 Points)",
+          "columns": [
+            "Who else will be in the top 3? (2 Points) (Pick #2)"
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 2.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Juicy Love Dion",
+            "Myki Meeks"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "who_will_be_eliminated_this_week_5_points": {
+          "qid": "who_will_be_eliminated_this_week_5_points",
+          "label": "Who will be eliminated this week? (5 points)",
+          "columns": [
+            "Who will be eliminated this week? (5 points) "
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 5.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Discord Addams"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "who_else_will_be_in_the_bottom_3_2_points": {
+          "qid": "who_else_will_be_in_the_bottom_3_2_points",
+          "label": "Who else will be in the bottom 3? (2 points)",
+          "columns": [
+            "Who else will be in the bottom 3? (2 points) (Pick #1)",
+            "Who else will be in the bottom 3? (2 points) (Pick #2)"
+          ],
+          "qtype": "contestant",
+          "timing": "episode",
+          "points_per_pick": 2.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Nini Coco",
+            "Jane Don't",
+            "Discord Addams"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": {
+          "qid": "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it",
+          "label": "Select all stunts that will or will not be in the lip sync (0.5 point for everything correctly guessed as being in it or not in it) (check means its in the lip sync, no check means it WONT be in it)",
+          "columns": [
+            "Select all stunts that will or will not be in the lip sync (0.5 point for everything correctly guessed as being in it or not in it) (check means its in the lip sync, no check means it WONT be in it)"
+          ],
+          "qtype": "text",
+          "timing": "episode",
+          "points_per_pick": 0.5,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Queens touch each other"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": true,
+          "option_universe": [
+            "Dip",
+            "Split",
+            "Reveal",
+            "High Kick",
+            "Article of costume is voluntarily removed",
+            "Article of costume is involuntarily removed",
+            "Queens touch each other"
+          ]
+        },
+        "what_will_be_the_lip_sync_song": {
+          "qid": "what_will_be_the_lip_sync_song",
+          "label": "What will be the lip sync song?",
+          "columns": [
+            "What will be the lip sync song?"
+          ],
+          "qtype": "text",
+          "timing": "episode",
+          "points_per_pick": 0.0,
+          "no_correct_answer": true,
+          "correct_answers": [],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        },
+        "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": {
+          "qid": "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color",
+          "label": "What color will RuPaul wear on the runway? (5 points) (most prominent color)",
+          "columns": [
+            "What color will RuPaul wear on the runway? (5 points) (most prominent color)"
+          ],
+          "qtype": "text",
+          "timing": "episode",
+          "points_per_pick": 5.0,
+          "no_correct_answer": false,
+          "correct_answers": [
+            "Blue"
+          ],
+          "notes": "",
+          "paid": false,
+          "checkbox_scoring": false,
+          "option_universe": []
+        }
+      },
+      "last_scored_rows": [
+        {
+          "username": "Miley Chondria",
+          "total": 8.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 2.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 0.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 4.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 2.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "Umami Thurman",
+          "total": 9.0,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 2.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 2.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 0.0,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "drtangerine",
+          "total": 8.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 0.0,
+          "who_else_will_be_in_the_top_3_2_points": 2.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 0.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 1.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "ed_head",
+          "total": 12.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 2.0,
+          "who_else_will_be_in_the_top_3_2_points": 2.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 2.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 1.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "Gay-me-in the Clunt-bauer",
+          "total": 12.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 2.0,
+          "who_else_will_be_in_the_top_3_2_points": 2.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 2.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 1.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "PacaPacaPaca",
+          "total": 7.0,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 0.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 0.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 2.0,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "nicolandio",
+          "total": 0.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 0.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 0.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 0.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 0.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "Jedsterz Jesters",
+          "total": 8.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 0.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 2.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 0.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 1.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "Actually gonna Sharr-own y'all",
+          "total": 13.5,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 2.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 0.0,
+          "who_else_will_be_in_the_top_3_2_points": 2.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 2.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 2.5,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 0.0
+        },
+        {
+          "username": "Poinhub’s Cummy Back",
+          "total": 20.0,
+          "username_if_not_in_above_drop_down": 0,
+          "who_will_win_this_episode_5_points": 5.0,
+          "who_else_will_be_in_the_top_of_the_episode_2_points": 0.0,
+          "who_else_will_be_in_the_top_3_2_points": 0.0,
+          "who_will_be_eliminated_this_week_5_points": 5.0,
+          "who_else_will_be_in_the_bottom_3_2_points": 2.0,
+          "select_all_stunts_that_will_or_will_not_be_in_the_lip_sync_05_point_for_everything_correctly_guessed_as_being_in_it_or_not_in_it_check_means_its_in_the_lip_sync_no_check_means_it_wont_be_in_it": 3.0,
+          "what_will_be_the_lip_sync_song": 0,
+          "what_color_will_rupaul_wear_on_the_runway_5_points_most_prominent_color": 5.0
+        }
+      ],
+      "last_export_url": "https://docs.google.com/spreadsheets/d/1FtG6r3md6Bdf7H87hw0t8LSn_9WmuUQHugMrbhaJbyw/export?format=csv&gid=1716482785",
+      "last_gid_used": "1716482785"
     }
   },
   "bonus_by_user": {}
